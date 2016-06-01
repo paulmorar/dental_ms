@@ -1,0 +1,37 @@
+<?php
+$html = array ();
+$iterator = new RecursiveIteratorIterator ( $this->container, RecursiveIteratorIterator::SELF_FIRST );
+$prevDepth = - 1;
+foreach ( $iterator as $page ) {
+    $depth = $iterator->getDepth ();
+    $isActive = $page->isActive ( true );
+    
+    if ($page->haspages ()) {
+        $liClass        = $isActive ? ' class="active dropdown"' : ' class="dropdown"';
+        $aData          = ' data-toggle="dropdown"';
+        $classUl        = ($depth == 0)?' class="sidebar-menu"':'';
+        $multilevel     = '<b class="caret"></b>';
+    } else {
+        $liClass    = $isActive ? ' class="active"' : '';
+        $aData      = '';
+        $classUl    = ($depth == 0)?' class="sidebar-menu"':'class="dropdown-menu"';
+        $multilevel = '';
+    }
+    
+    if ($depth > $prevDepth) { 
+        $html [] = '<ul '.$classUl.'>' . "\n";
+    } else if ($prevDepth > $depth) {
+        for($i = $prevDepth; $i > $depth; $i --) {
+            $html [] = '</li>' . "\n";
+            $html [] = '</ul>' . "\n";
+        }
+        $html [] = '    </li>' . "\n";
+    } else {
+        $html [] = '    </li>' . "\n";
+    }
+   
+    $html [] = '<li' . $liClass . '>' . "\n";
+    $html [] = '<a href="' . $page->getHref () . '" ' .$aData. '><span class="' . $page->getClass () . '" aria-hidden="true"></span>' . $page->getLabel () . $multilevel.'</a>' . "\n";
+    $prevDepth = $depth;
+}
+echo join ( PHP_EOL, $html );

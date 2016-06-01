@@ -1,0 +1,103 @@
+<form id="<?php echo $this->element->getId();?>" class="<?php echo $this->element->getAttrib('class');?>" action="<?php echo $this->element->getAction();?>" method="<?php echo $this->element->getMethod();?>" enctype="<?php echo $this->element->getEncType();?>">
+    <div class="box-body">
+        <div class="form-group">
+            <?php echo $this->{$this->element->client->helper}(
+                $this->element->client->getName(),
+                $this->element->client->getValue(),
+                $this->element->client->getAttribs()
+            );?>                    
+            <?php if(($this->element->client->getMessages())){ echo  $this->formErrors($this->element->client->getMessages());}?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->{$this->element->tip->helper}(
+                $this->element->tip->getName(),
+                $this->element->tip->getValue(),
+                $this->element->tip->getAttribs(),
+                $this->element->tip->getMultiOptions()
+            );?>                    
+            <?php if(($this->element->tip->getMessages())){ echo  $this->formErrors($this->element->tip->getMessages());}?>
+        </div>                                                  
+        <div class="form-group">
+            <?php echo $this->{$this->element->nume->helper}(
+                $this->element->nume->getName(),
+                $this->element->nume->getValue(),
+                $this->element->nume->getAttribs()
+            );?>                    
+            <?php if(($this->element->nume->getMessages())){ echo  $this->formErrors($this->element->nume->getMessages());}?>
+        </div>                                                  
+        <div class="form-group">
+            <?php echo $this->{$this->element->detalii->helper}(
+                $this->element->detalii->getName(),
+                $this->element->detalii->getValue(),
+                $this->element->detalii->getAttribs()
+            );?>                    
+            <?php if(($this->element->detalii->getMessages())){ echo  $this->formErrors($this->element->detalii->getMessages());}?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->{$this->element->departament->helper}(
+                $this->element->departament->getName(),
+                $this->element->departament->getValue(),
+                $this->element->departament->getAttribs(),
+                $this->element->departament->getMultiOptions()
+            );?>                    
+            <?php if(($this->element->departament->getMessages())){ echo  $this->formErrors($this->element->departament->getMessages());}?>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input id="incomplet" name="incomplet" type="checkbox" value="1">
+                </span>
+                <?php echo $this->{$this->element->detalii_incomplet->helper}(
+                        $this->element->detalii_incomplet->getName(),
+                        $this->element->detalii_incomplet->getValue(),
+                        $this->element->detalii_incomplet->getAttribs()
+                    );?>
+            </div>
+        </div>
+        <?php echo $this->{$this->element->submit->helper}(
+            $this->element->submit->getName(),
+            $this->element->submit->getValue(),
+            $this->element->submit->getAttribs()
+        );?>
+    </div>
+</form>
+<div class="clear"></div>
+<?php
+    $actual     = Needs_Tools::getClientByComandaId($this->element->idComanda->getValue());
+    if($actual){
+        $actual = $actual->getId();  
+    }else{
+        $actual = '';
+    }
+    $clients    = Needs_Tools::getClients();
+    $options    = "";
+    foreach($clients as $client){
+        $options .= "{id: '".$client->getId()."', name: '".$client->getNume()." - ".$client->getEmail()."'},";
+    }
+    $options    = rtrim($options,',');
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+    <?php 
+        //verificam daca este incomplet sa selectam checkboxul
+        if(Needs_Tools::getStatusComandaById($this->element->idComanda->getValue()) != 0){ ?>
+            $('#incomplet').attr('checked', true);
+    <?php 
+        }     
+    ?>
+    $('#client').selectize({
+        plugins: ['remove_button'],
+        persist: false,
+        valueField: 'id',
+        labelField: 'name',
+        maxItems: 1,
+        items: [<?php echo $actual; ?>],
+        searchField: ['name'],
+        options: [
+            <?php echo $options; ?>
+        ],
+    });
+    
+    $('#<?php echo $this->element->getId();?>').validationEngine('attach', {promptPosition : "centerRight"});
+});
+</script>

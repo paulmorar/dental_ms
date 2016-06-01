@@ -1,0 +1,16 @@
+<!-- BEGIN: Show error messages -->
+<?php if(!empty($this->message)):?>
+	<?php foreach($this->message as $value):?>
+		<center><?php echo $value; ?></center>
+	<?php endforeach; ?>
+	<div class="clearfix">&nbsp;</div>
+<?php endif;?>
+<!-- END: Show error messages -->
+<div class="col-md-8">
+	<div class="col-md-12">
+		<button class="btn btn-primary" onclick="location.href='<?php echo WEBROOT; ?>agents'" title="<?php echo Zend_Registry::get('translate')->_('back'); ?>' " >&laquo; <?php echo Zend_Registry::get('translate')->_('back'); ?></button>
+	</div>
+</div>
+<div class="clear">&nbsp;</div>
+<?php echo $this->formAddAgent; ?>
+

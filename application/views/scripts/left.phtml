@@ -1,0 +1,11 @@
+<div id="left">
+	<div class="menu">
+		<ul class="menu_ul">
+                    <?php 
+                        $this->setEscape('trim'); // will allow html and remove escaping
+                        echo $this->navigation()->menu()->setMaxDepth(0);
+                        $this->setEscape('htmlspecialchars'); // restore escaping mechanism
+                    ?> 
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,15 @@
+<?php echo $this->doctype('HTML5'); ?>
+<html>
+<head>
+	<?php echo $this->headTitle(); ?>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<?php echo $this->headLink();?>
+	<?php echo $this->headStyle();?>
+	<link href="<?php echo WEBROOT ?>theme/se7en/stylesheets/style.css" media="all" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<?php echo $this->headScript();?>	
+</head>
+<body>
+	<?php echo $this->layout()->content;?>
+</body>
+</html>

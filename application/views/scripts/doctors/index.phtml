@@ -1,0 +1,92 @@
+<div class="col-md-12">
+    <?php if(!empty($this->message)) : ?>
+    <?php foreach($this->message as $value) : ?>
+        <center class="w670"><?php echo $value; ?></center>
+    <?php endforeach; ?>
+    <div class="clearfix">&nbsp;</div>
+<?php endif; ?>
+</div>
+<div class="btn-group margin-bottom">
+    <a href="<?php echo WEBROOT; ?>doctors/add" class="btn btn-primary btn-block"><b>Adauga</b></a>
+</div>
+<div class="clear"></div>
+<div class="box">
+    <div class="box-body">
+      <table id="utilizatori" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Nume</th>
+          <th>Email</th>
+          <th>Data nasterii</th>
+          <th>CNP</th>
+          <th>Telefon</th>
+          <th>Adresa</th>
+          <th>Actiuni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        if($this->result) {
+            foreach($this->result as $value){ ?>
+            <tr>
+              <td> <?php echo $value->getName(); ?> </td>
+              <td> <?php echo $value->getEmail(); ?> </td>
+              <td> <?php echo date('d-m-Y', $value->getBirth_date()); ?> </td>
+              <td> <?php echo $value->getCnp(); ?> </td>
+              <td> <?php echo $value->getPhone_number(); ?> </td>
+              <td> <?php echo $value->getAddress(); ?> </td>
+              <td>
+                  <a href='<?php echo WEBROOT; ?>doctors/edit/id/<?php echo $value->getId(); ?>' title='Editeaza' class='margin-r-5'><i class='fa fa-edit'></i></a>
+                  <a href='#0' title='Sterge' data-toggle="modal" data-target="#modal-<?php echo $value->getId(); ?>"><i class='fa fa-remove'></i></a>
+              </td>
+            </tr>
+            <div id='modal-<?php echo $value->getId(); ?>' class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title">Confirmare stergere</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Sunteti sigur ca doriti sa stergeti acest utilizator: <strong><?php echo $value->getName(); ?></strong> ?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
+                      <a class="btn btn-primary" href="<?php echo WEBROOT; ?>doctors/delete/id/<?php echo $value->getId(); ?>">Sterge</a>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <?php }
+        } ?>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<div class="clear"></div>
+<script>
+$(document).ready(function(){
+    $(function () {
+        $('#utilizatori').DataTable({
+                    "language": {
+                    "sProcessing":   "Proceseaza...",
+                    "sLengthMenu":   "Afiseaza _MENU_ inregistrari pe pagina",
+                    "sZeroRecords":  "Nu am gasit nimic - ne pare rau",
+                    "sInfo":         "Afisate de la _START_ la _END_ din _TOTAL_ inregistrari",
+                    "sInfoEmpty":    "Afisate de la 0 la 0 din 0 inregistrari",
+                    "sInfoFiltered": "(filtrate dintr-un total de _MAX_ inregistrari)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "Cauta:",
+                    "sUrl":          "",
+                    "oPaginate": {
+                        "sFirst":    "Prima",
+                        "sPrevious": "Precedenta",
+                        "sNext":     "Urmatoarea",
+                        "sLast":     "Ultima"
+                    }
+                }
+            } );
+        } );
+});
+</script>

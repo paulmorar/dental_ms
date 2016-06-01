@@ -1,0 +1,88 @@
+<form id="<?php echo $this->element->getId();?>" class="<?php echo $this->element->getAttrib('class');?>" action="<?php echo $this->element->getAction();?>" method="<?php echo $this->element->getMethod();?>" enctype="<?php echo $this->element->getEncType();?>">
+    <div class="box-body">
+                <div class="form-group">
+                    <?php echo $this->{$this->element->name->helper}(
+                        $this->element->name->getName(),
+                        $this->element->name->getValue(),
+                        $this->element->name->getAttribs()
+                    );?>
+                    <?php if(($this->element->name->getMessages())){ echo  $this->formErrors($this->element->name->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->email->helper}(
+                        $this->element->email->getName(),
+                        $this->element->email->getValue(),
+                        $this->element->email->getAttribs()
+                    );?>
+                    <?php if(($this->element->email->getMessages())){ echo  $this->formErrors($this->element->email->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->birth_date->helper}(
+                        $this->element->birth_date->getName(),
+                        $this->element->birth_date->getValue(),
+                        $this->element->birth_date->getAttribs()
+                    );?>
+                    <?php if(($this->element->birth_date->getMessages())){ echo  $this->formErrors($this->element->birth_date->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->age->helper}(
+                        $this->element->age->getName(),
+                        $this->element->age->getValue(),
+                        $this->element->age->getAttribs()
+                    );?>
+                    <?php if(($this->element->age->getMessages())){ echo  $this->formErrors($this->element->age->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->ocupation->helper}(
+                        $this->element->ocupation->getName(),
+                        $this->element->ocupation->getValue(),
+                        $this->element->ocupation->getAttribs()
+                    );?>
+                    <?php if(($this->element->ocupation->getMessages())){ echo  $this->formErrors($this->element->ocupation->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->address->helper}(
+                        $this->element->address->getName(),
+                        $this->element->address->getValue(),
+                        $this->element->address->getAttribs()
+                    );?>
+                    <?php if(($this->element->address->getMessages())){ echo  $this->formErrors($this->element->address->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->cnp->helper}(
+                        $this->element->cnp->getName(),
+                        $this->element->cnp->getValue(),
+                        $this->element->cnp->getAttribs()
+                    );?>
+                    <?php if(($this->element->cnp->getMessages())){ echo  $this->formErrors($this->element->cnp->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->ci->helper}(
+                        $this->element->ci->getName(),
+                        $this->element->ci->getValue(),
+                        $this->element->ci->getAttribs()
+                    );?>
+                    <?php if(($this->element->ci->getMessages())){ echo  $this->formErrors($this->element->ci->getMessages());}?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->{$this->element->phone_number->helper}(
+                        $this->element->phone_number->getName(),
+                        $this->element->phone_number->getValue(),
+                        $this->element->phone_number->getAttribs()
+                    );?>
+                    <?php if(($this->element->phone_number->getMessages())){ echo  $this->formErrors($this->element->phone_number->getMessages());}?>
+                </div>
+        <?php echo $this->{$this->element->submit->helper}(
+            $this->element->submit->getName(),
+            $this->element->submit->getValue(),
+            $this->element->submit->getAttribs()
+        );?>
+    </div>
+</form>
+<div class="clear"></div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#<?php echo $this->element->getId();?>').validationEngine('attach', {promptPosition : "centerRight"});
+  $('#birth_date').datepicker();
+});
+</script>

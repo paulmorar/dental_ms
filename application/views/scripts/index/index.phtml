@@ -1,0 +1,187 @@
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-files-o margin-t-20"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Numar comenzi</span>
+          <span class="info-box-number"><?php echo number_format($this->total,0,',','.'); ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-red"><i class="fa fa-send-o margin-t-20"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Comenzi expediate</span>
+          <span class="info-box-number"><?php echo number_format($this->expediate,0,',','.'); ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-users margin-t-20"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Numar clienti</span>
+          <span class="info-box-number"><?php echo number_format($this->clienti,0,',','.'); ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-yellow"><i class="fa fa-line-chart margin-t-20"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Medie comenzi / client</span>
+          <?php
+          if($this->total > 0 && $this->clienti > 0){
+              $total = $this->total/ $this->clienti;
+          } else {
+              $total = 0;
+          }
+          
+          ?>
+          <span class="info-box-number"><?php echo number_format($total,2,',','.'); ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+<div class="col-md-4 no-padding">
+    <div class="box box-default">
+        <div class="box-header with-border">
+          <h3 class="box-title">Statistica pe tipuri de comenzi</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="col-md-8">
+              <div class="chart-responsive">
+                <div id="pieChart" style="height: 500px;"></div>
+              </div>
+              <!-- ./chart-responsive -->
+            </div>
+        </div>
+        <!-- /.footer -->
+    </div>
+</div>
+<div class="col-md-8">
+    <!-- /.box -->
+    <div class="box box-default">
+        <div class="box-header with-border">
+          <h3 class="box-title">Statistica introducere comenzi</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+              <div class="chart-responsive">
+                <div id="areaChart" style="height: 500px;"></div>
+              </div>
+        </div>
+        <!-- /.footer -->
+    </div>
+    <!-- /.box -->
+</div>
+<?php
+$dataOptions = '[';
+if($this->tipuri){
+    foreach($this->tipuri as $option){
+        $value = Needs_Tools::getComenziTipNr($option->getId(),$this->start,$this->end);
+        $dataOptions .= "{ name : '". $option->getNume()."',y : ". $value." },"; 
+    }
+}
+$dataOptions = rtrim($dataOptions,',');
+$dataOptions .= ']';
+?>
+<script>
+$(function () {
+    $(document).ready(function () {
+        // Build the chart
+        $('#pieChart').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: false
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.y}</b>'
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Comenzi',
+                colorByPoint: true,
+                data: <?php echo $dataOptions; ?>
+            }]
+        });
+    });
+});
+$(function () {
+    $('#areaChart').highcharts({
+        chart: {
+            type: 'area'
+        },
+        title: {
+            text: false
+        },
+        subtitle: {
+            text: false
+        },
+        credits: {
+                enabled: false
+            },
+        xAxis: {
+            categories: [<?php echo $this->days; ?>]
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function () {
+                    return this.value;
+                }
+            },
+            tickInterval: 1,
+            allowDecimals: false
+        },
+        tooltip: {
+            pointFormat: '{series.name} <b>{point.y:,.0f}</b>'
+        },
+        series: [{
+            name: 'Numar comenzi',
+            data: <?php echo $this->grafic; ?>
+        }]
+    });
+});
+</script>

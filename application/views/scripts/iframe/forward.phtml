@@ -1,0 +1,25 @@
+<div class="col-md-12">
+    <div class="col-md-12">
+        <?php if(!empty($this->message)) : ?>
+        <?php foreach($this->message as $value) : ?>
+            <center class="w670"><?php echo $value; ?></center>
+        <?php endforeach; ?>
+        <div class="clearfix">&nbsp;</div>
+    <?php endif; ?>
+    </div>
+    <div class="modal fade" id="">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              
+              <p class="modal-title padded">Mobile City</p>
+            </div>
+            <div class="modal-body">
+                <h3 class="padded" style="margin:0px;">Redistribuire email</h3>
+              <?php echo $this->formForward; ?>    
+            </div>
+          </div>
+        </div>
+    </div>
+		
+</div>

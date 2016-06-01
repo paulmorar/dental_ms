@@ -1,0 +1,89 @@
+<div class="col-md-12">
+    <?php if(!empty($this->message)) : ?>
+    <?php foreach($this->message as $value) : ?>
+        <center class="w670"><?php echo $value; ?></center>
+    <?php endforeach; ?>
+    <div class="clearfix">&nbsp;</div>
+<?php endif; ?>
+</div>
+<div class="btn-group margin-bottom">
+    <a href="<?php echo WEBROOT; ?>albume/add" class="btn btn-primary btn-block"><b>Adauga album</b></a>
+</div>
+<div class="clear"></div>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Albume</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table id="albume" class="table table-bordered table-striped">
+        <thead>              
+        <tr>
+          <th>Nume</th>
+          <th>Data adaugarii</th>
+          <th>Actiuni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php 
+        if($this->result) {
+            foreach($this->result as $value){ ?>
+            <tr>
+              <td> <?php echo $value->getNume(); ?> </td>
+              <td> <?php echo date('d-m-Y H:i', $value->getCreated()); ?> </td>
+              <td>
+                  <a href='<?php echo WEBROOT; ?>albume/edit/id/<?php echo $value->getId(); ?>' title='Editeaza' class='margin-r-5'><i class='fa fa-edit'></i></a>
+                  <a href='#0' title='Sterge' data-toggle="modal" data-target="#modal-<?php echo $value->getId(); ?>"><i class='fa fa-remove'></i></a>
+              </td>
+            </tr>
+            <div id='modal-<?php echo $value->getId(); ?>' class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title">Confirmare stergere</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Sunteti sigur ca doriti sa stergeti albumul: <strong><?php echo $value->getNume(); ?></strong> ?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
+                      <a class="btn btn-primary" href="<?php echo WEBROOT; ?>albume/delete/id/<?php echo $value->getId(); ?>">Sterge</a>
+                      <!--<button type="button" class="btn btn-primary">Sterge</button>-->
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <?php }
+        } ?>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<div class="clear"></div>
+<script>
+$(document).ready(function(){
+    $(function () {
+        $('#albume').DataTable({
+                    "language": {
+                    "sProcessing":   "Proceseaza...",
+                    "sLengthMenu":   "Afiseaza _MENU_ inregistrari pe pagina",
+                    "sZeroRecords":  "Nu am gasit nimic - ne pare rau",
+                    "sInfo":         "Afisate de la _START_ la _END_ din _TOTAL_ inregistrari",
+                    "sInfoEmpty":    "Afisate de la 0 la 0 din 0 inregistrari",
+                    "sInfoFiltered": "(filtrate dintr-un total de _MAX_ inregistrari)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "Cauta:",
+                    "sUrl":          "",
+                    "oPaginate": {
+                        "sFirst":    "Prima",
+                        "sPrevious": "Precedenta",
+                        "sNext":     "Urmatoarea",
+                        "sLast":     "Ultima"
+                    }
+                }
+            } );
+        } );
+});
+</script>

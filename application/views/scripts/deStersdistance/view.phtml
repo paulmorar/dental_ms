@@ -1,0 +1,249 @@
+<div class="col-md-12">
+    <?php if(!empty($this->message)) : ?>
+    <?php foreach($this->message as $value) : ?>
+        <center class="w670"><?php echo $value; ?></center>
+    <?php endforeach; ?>
+    <div class="clearfix">&nbsp;</div>
+<?php endif; ?>
+</div>
+<div class="page-title">
+    <h1>
+      INDEX AUTOTURISME DEPODENT
+    </h1>
+</div>
+<div class="col-md-8">
+    <div class="col-md-12">
+        <button class="btn btn-primary" onclick="location.href='<?php echo WEBROOT; ?>distance'" title="<?php echo Zend_Registry::get('translate')->_('back'); ?>' " >&laquo; <?php echo Zend_Registry::get('translate')->_('back'); ?></button>
+        <div class="clear">&nbsp;</div>        
+    </div>
+</div>
+<div class="clear"></div>
+<!--KM DPO-->
+<div class="row">
+    <!-- Hover Row Table -->
+    <div class="col-lg-12">
+      <div class="widget-container fluid-height clearfix">
+        <div class="heading">
+          <i class="fa fa-truck"></i>
+        </div>
+        <div class="widget-content padded clearfix">  
+        <?php if($this->result){?>
+            <table class="table">
+                <thead>
+                  <th>
+                    Agent
+                  </th>
+                  <th>
+                    Autoturism
+                  </th>
+                  <th>
+                    Luna
+                  </th>
+                  <th>
+                    Index luna precedenta
+                  </th>
+                  <th>
+                    Index luna curenta
+                  </th>
+                  <th>
+                    KM Totali luna curenta
+                  </th>
+                  <th>
+                    KM Firma
+                  </th>
+                  <th>
+                    KM Personali
+                  </th>             
+                  <th></th>
+                </thead>
+                <tbody>                             
+                    <tr>
+                      <td>
+                        <?php echo Needs_Tools::getAgentById($this->result->getIdAgent()); ?>
+                      </td>
+                      <td>
+                        <?php echo Needs_Tools::getCarById($this->result->getIdCar()); ?>
+                      </td>
+                      <td> 
+                          <?php echo Needs_Tools::getMonthByAgentId($this->result->getIdAgent());?>
+                      </td>
+                      <td id="oldIndex"></td>
+                      <td id="currentIndex"></td>
+                      <td id="totalKm"></td> 
+                      <td id="workKm"></td>
+                      <td id="personalKm"></td>                                    
+                      <td id="addIndex">
+                          <button id="submitIndex" class="btn btn-default" type="submit">Adauga</button>
+                      </td>
+                    </tr>                  
+                </tbody>            
+            </table>            
+            <div class="widget-content padded">
+                <div class="alert alert-info">
+                     <?php echo Needs_Tools::getLastRevisionDateByCarId($this->result->getIdCar()); ?>                    
+                </div>
+                <p>Adauga data ultimei revizii: </p>
+                <div data-date-format="dd-mm-yyyy" data-date-autoclose="true" class="input-group date datepicker" style="padding:0px;width:170px;float:left;margin-right:20px;">
+                    <input type="text" id="serviceDate" class="form-control" placeholder="Selecteaza data"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>                                                                                                  
+                </div>
+                <input type="text" style="width:170px;" placeholder="Adauga indexul reviziei" id="kmIndex" class="form-control">
+                <div class="clear">&nbsp;</div>
+                <button id="addService" class="btn btn-lg btn-default">Adauga</button>
+                <div class="clear">&nbsp;</div>       
+                <?php echo Needs_Tools::getLastServiceKmByAgentId($this->result->getIdAgent())  ?>
+              
+            </div> 
+            <?php }else{ ?>                                  
+                <div class="col-md-6 pull-left"><h3>Nu exista un index al kilometrilor inregistrati in baza de date pentru acest utilizator!</h3></div>                                  
+            <?php } ?>
+        </div>
+      </div>
+    </div>
+</div>
+<?php if($this->result){?>
+<script type="text/javascript"> 
+   
+    $(document).ready(function(){
+        $(document).on('keyup','#newIndex',function(){
+            var previousIndex = <?php echo $this->result->getNewKmIndex(); ?>;     
+            var sum = $('#newIndex').val()-previousIndex;
+            var totalKM = parseFloat(sum).toFixed(2);
+            $('#totalKm').html(totalKM);
+	
+            $(document).on('keyup','#dpoKm',function(){
+
+                    var sumPersonalKM = totalKM - $('#dpoKm').val();
+                    var personalKM = parseFloat(sumPersonalKM).toFixed(2);
+                    $('#personalKm').html(personalKM);
+            });
+        });
+        //    get comment by date
+        $('#selectMonth').change(function (e) {
+            e.preventDefault();
+            
+            var monthId = $(this).val();
+            var agentId = "<?php echo $this->result->getIdAgent() ?>";
+//            var d = new Date();
+//            var n = d.getMonth(); 
+//            if(monthId === n) {                 
+//               $('#addIndex').append('<button id="submitIndex" class="btn btn-default" type="submit">Adauga</button>');
+//            }
+                      
+            $.ajax({
+                type:"POST",
+                url:"<?php echo WEBROOT; ?>ajax/get-distance",
+                data: {monthId: monthId, agentId: agentId}
+            })
+            .done(function(msg){
+                if(msg){
+                    data = jQuery.parseJSON(msg);
+                }
+
+                if(data){                    
+                    lastKmIndex=data['lastKmIndex'];                                                                                    
+                    newKmIndex=data['newKmIndex'];                                                                                    
+                    totalKm=data['totalKm'];                                                                                     
+                    workKm=data['workKm'];                                                                                    
+                    personalKm=data['personalKm'];                                                                                    
+                };                    
+//                $('#oldIndex').html(lastKmIndex); 
+                if(lastKmIndex !== null){
+                $('#oldIndex').html(lastKmIndex);
+                $('#submitIndex').hide();
+                }else if(monthId === "") {
+                    $('#oldIndex').html('');
+                }
+                else{
+                    $('#oldIndex').html('<?php echo $this->result->getNewKmIndex() ?>');
+                    $('#submitIndex').show();
+                }
+                if(newKmIndex !== null){
+                    $('#currentIndex').html(newKmIndex); 
+                }else if(monthId === "") {
+                    $('#currentIndex').html('');
+                }else{
+                    $('#currentIndex').html('<input class="form-control" id="newIndex" placeholder="" type="text">');
+                }
+                if(totalKm !== 0){
+                $('#totalKm').html(totalKm);
+                }else if(monthId === "") {
+                    $('#totalKm').html('');
+                }else{
+                    $('#totalKm').html('0');
+                }
+                if(workKm !== null){
+                    $('#workKm').html(workKm); 
+                }else if(monthId === "") {
+                    $('#workKm').html('');
+                }else{
+                    $('#workKm').html('<input class="form-control" id="dpoKm" placeholder="" type="text">');
+                }
+                if(personalKm !== 0){
+                $('#personalKm').html(personalKm);
+                }else if(monthId === "") {
+                    $('#personalKm').html('');
+                }else{
+                    $('#personalKm').html('0');
+                }
+            });             
+            return false;
+        });
+        
+        // add km index for current month
+    
+    });
+    $('#submitIndex').click(function (e) {
+        e.preventDefault(); 
+//        alert('intra');
+        var agentId = "<?php echo $this->result->getIdAgent() ?>";
+        var monthId = $('#selectMonth').val();
+        var oldIndex = "<?php echo $this->result->getNewKmIndex(); ?>";
+        var newIndex = $('#newIndex').val();
+        var workKm = $('#dpoKm').val();    
+        var personalKm = ($('#newIndex').val() - "<?php echo $this->result->getNewKmIndex() ?>")-workKm;    
+        if(monthId !== ""){
+            if(personalKm > 0){
+            if(newIndex !== "" && workKm !== ""){    
+                $.ajax({
+                    type:"POST",
+                    url: "<?php echo WEBROOT; ?>ajax/add-index",
+                    data:{agentId: agentId, monthId: monthId, oldIndex: oldIndex, newIndex: newIndex, workKm: workKm, personalKm: personalKm}                   
+                })
+                .done(function(){         
+                    alert('Indexul pe luna curenta a fost adaugat cu succes!'); 
+                    window.location.reload();
+                });
+            }else{
+                alert ('Completeaza toate campurile!');
+            }
+            }else{
+                alert ('Campul Km firma nu a fost completat corect!');
+            }
+        }else{
+            alert ('Selecteaza luna!');
+        }
+    });
+    
+    $('#addService').click(function (e) {
+        e.preventDefault(); 
+//        alert('intra');
+        var agentId = "<?php echo $this->result->getIdAgent(); ?>";
+        var carId = "<?php echo $this->result->getIdCar(); ?>";
+        var serviceDate = $('#serviceDate').val();
+        var kmIndex = $('#kmIndex').val();
+        if(serviceDate !== "" && kmIndex !== ""){              
+            $.ajax({
+                type:"POST",
+                url: "<?php echo WEBROOT; ?>ajax/add-service",
+                data:{agentId: agentId,carId: carId,serviceDate: serviceDate, kmIndex: kmIndex}                   
+            })
+            .done(function(){         
+                alert('Data reviziei a fost modificata cu succes!'); 
+                window.location.reload();
+            });            
+        }else{
+            alert ('Adauga data si indexul!');
+        }
+    });
+</script>
+<?php } ?>

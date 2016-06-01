@@ -1,0 +1,39 @@
+<form method="<?php echo $this->element->getMethod();?>" action="<?php echo $this->element->getAction();?>" id="<?php echo $this->element->getId();?>" enctype="<?php echo $this->element->getEncType();?>">
+    <div class="form-group has-feedback">
+       <?php
+           echo $this->{$this->element->userEmail->helper}(
+                       $this->element->userEmail->getName(),
+                       $this->element->userEmail->getValue(),
+                       $this->element->userEmail->getAttribs()
+                   );
+       ?>
+       <?php 
+           if(($this->element->userEmail->getMessages())){ echo  $this->formErrors($this->element->userEmail->getMessages());} 
+       ?>
+       <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+    </div>
+    <div class="form-group has-feedback">
+        <?php
+            echo $this->{$this->element->userPassword->helper}(
+                        $this->element->userPassword->getName(),
+                        $this->element->userPassword->getValue(),
+                        $this->element->userPassword->getAttribs()
+                    );
+        ?>
+        <?php 
+            if(($this->element->userPassword->getMessages())){ echo  $this->formErrors($this->element->userPassword->getMessages());} 
+        ?>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+    </div>
+    <div class="row">
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <?php echo $this->{$this->element->submit->helper}(
+            $this->element->submit->getName(),
+            $this->element->submit->getValue(),
+            $this->element->submit->getAttribs()
+        );?>
+        </div>
+        <!-- /.col -->
+    </div>
+</form>

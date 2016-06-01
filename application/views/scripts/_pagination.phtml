@@ -1,0 +1,55 @@
+<?php
+$result = Zend_View_Helper_PaginationControl::getDefaultViewPartial();
+if(is_array($result)) {
+	if(!empty($result[1])) {
+		$allParams = $result[1];
+	} else {
+		$allParams = Zend_Controller_Front::getInstance()->getRequest()->getParams();
+	}
+} else {
+	$allParams = array();
+}
+if($this->pageCount){?>
+	 <div class="widget-content padded text-center">
+		<ul class="pagination">
+            <!--First Page Link-->
+            <?php if(isset($this->previous)){?>
+                <li>			
+                    <a class="icon" href="<?php echo $this->url(array_merge($allParams, array('page' => $this->first)));?>"><i class="fa fa-long-arrow-left"></i></a>				
+                </li>
+            <?php }?>
+                
+            <!-- Previous page link -->
+            <?php // if(isset($this->previous)){?>
+                <!--<li><a class="icon" href="<?php // echo $this->url(array_merge($allParams, array('page' => $this->previous))); ?>"><i class="fa fa-long-arrow-left"></i></a></li>-->
+            <?php // }else{?>
+                <!--<li><a class="icon" href="javascript:;"><i class="fa fa-long-arrow-left"></i></a></li>-->
+            <?php // }?>
+
+            <!-- Numbered page links -->		
+            <?php foreach($this->pagesInRange as $page) : ?>
+                <?php if($page != $this->current) : ?>
+                    <li><a href="<?php echo $this->url(array_merge($allParams, array('page' => $page))); ?>"><?php echo $page; ?></a></li>
+                <?php else : ?>
+                    <li class='active'><a href="javascript:;"><?php echo $page; ?></a></li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <?php // if(isset($this->next)) : ?>
+                <!--<li><a class="icon" href="<?php // echo $this->url(array_merge($allParams, array('page' => $this->next))); ?>"><i class="fa fa-long-arrow-right"></i></a></li>-->
+            <?php // endif; ?>
+            <!--Last Page Link-->
+            <?php if(isset($this->next)){?>
+                <li>
+                    <a class="icon" href="<?php echo $this->url(array_merge($allParams, array('page' => $this->last)));?>"><i class="fa fa-long-arrow-right"></i></a>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
+<?php }?>
+<script type="text/javascript">
+$('#paginationControl').change(function() {
+    window.location = $(this).val();
+})
+</script>

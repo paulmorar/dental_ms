@@ -1,0 +1,18 @@
+<div class="col-md-12">
+    <?php if(!empty($this->message)) : ?>
+        <?php foreach($this->message as $value) : ?>
+            <center style='width: 360px;margin: 0 auto;'><?php echo $value; ?></center>
+        <?php endforeach; ?>
+        <div class="clearfix">&nbsp;</div>
+    <?php endif; ?>
+</div>
+<div class="login-box">
+  <div class="login-logo">
+    <a href="#"></a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+      <?php echo $this->form; ?>
+  </div>
+  <!-- /.login-box-body -->
+</div>

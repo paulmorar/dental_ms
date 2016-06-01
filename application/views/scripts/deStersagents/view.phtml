@@ -1,0 +1,202 @@
+<!-- BEGIN: Show error messages -->
+<?php if(!empty($this->message)):?>
+	<?php foreach($this->message as $value):?>
+		<center><?php echo $value; ?></center>
+	<?php endforeach; ?>
+	<div class="clearfix">&nbsp;</div>
+<?php endif;?>
+<!-- END: Show error messages -->
+<div class="col-md-8">
+    <div class="col-md-12">
+        <button class="btn btn-primary" onclick="location.href='<?php echo WEBROOT; ?>agents'" title="<?php echo Zend_Registry::get('translate')->_('back'); ?>' " >&laquo; <?php echo Zend_Registry::get('translate')->_('back'); ?></button>
+        <div class="clear">&nbsp;</div>        
+    </div>
+</div>
+<div class="clear">&nbsp;</div>
+<?php if($this->resultAgent){?>
+<div class="row">
+    <!-- Hover Row Table -->
+    <div class="col-lg-12">
+      <div class="widget-container fluid-height clearfix">
+        <div class="heading">
+            <i class="fa fa-user"></i><?php echo Needs_Tools::getAgentById($this->resultAgent->getIdAgent()); ?>
+        </div>
+        <div class="widget-content padded clearfix">        
+          <table class="table">
+            <thead>
+            <th></th>
+              <th>
+                Nume client
+              </th>
+              <th>
+                Companie
+              </th>
+              <th>
+                Adresa/Judet/Oras
+              </th>
+              <th>
+                CUI
+              </th>
+              <th>
+                Telefon firma
+              </th>
+              <th>
+                Telefon medic
+              </th>
+              <th>
+                Email
+              </th>
+              <th></th>
+              <th></th>
+            </thead>
+            <tbody>
+            
+              <tr>
+                <td>
+                    <div class="modal fade" id="myModal_<?php echo $this->resultAgent->getIdClient(); ?>">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                              <h4 class="modal-title">Depodent</h4>
+                            </div>
+                            <div class="modal-body">
+                              <h1>Confirmare stergere</h1>
+                              <p>Sunteti sigur ca doriti sa stergeti acest client?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <a class="btn btn-primary" href="<?php echo WEBROOT; ?>clients/delete/id/<?php echo $this->resultAgent->getIdClient(); ?>">Da</a><button class="btn btn-default-outline" data-dismiss="modal" type="button">Nu</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  <?php if(Needs_Roles::hasAccess(Zend_Registry::get('user')->getIdRole(),'editare_client')){  ?>	
+                  <a title="Editeaza" class="table-actions" href="<?php echo WEBROOT; ?>clients/edit/id/<?php echo $this->resultAgent->getIdClient(); ?>"><i class="fa fa-pencil"></i></a>
+                  <?php } ?>
+                  <?php if(Needs_Roles::hasAccess(Zend_Registry::get('user')->getIdRole(),'stergere_client')){  ?>	
+                  <a title="Sterge clientul" data-toggle="modal" class="table-actions" href="#myModal_<?php echo $this->resultAgent->getIdClient(); ?>"><i class="fa fa-trash-o"></i></a>
+                  <?php } ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getClient(); ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getCompany(); ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getAddress(); ?><br><?php echo Needs_Tools::getCityById($this->resultAgent->getIdCity()).',' ?> <?php echo Needs_Tools::getCountyById($this->resultAgent->getIdCounty()); ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getCui(); ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getPhone(); ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getPhoneMedic(); ?>
+                </td>
+                <td>
+                  <?php echo $this->resultAgent->getEmail(); ?>
+                </td>
+                <td class="custom-select-date">  
+                  <?php if($this->resultAgent->getIdClient()!=NULL) { ?>
+                  <?php echo Needs_Tools::getVisitsByClientId($this->resultAgent->getIdClient());}?>
+                </td>                
+                  <?php if($this->resultAgent->getIdClient()!=NULL) { ?>                    
+                    <td id="getComment<?php echo $this->resultAgent->getIdClient(); ?>"></td> 
+                  <?php } ?>                
+              </tr>
+              <?php // }?>
+            <?php }else{ ?>
+            <tr>
+                <td>
+                    <div class="col-md-6 pull-left"><h3>Nu exista informatii!</h3></div>
+                </td>            
+            </tr>
+            <?php } ?>
+            </tbody>
+          </table>
+            <div class="input-group date" style="width: 15%;padding:0px;margin-right:20px;float:left">
+                    <input class="form-control datepicker validate[required]" data-date-autoclose="true" data-date-format="dd-mm-yyyy" type="text" placeholder="Selecteaza data"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            <input class="form-control addComment" placeholder="Comentariu" type="text">
+            <?php if($this->resultAgent->getIdClient()!=NULL) { ?>
+                    <button id="<?php echo $this->resultAgent->getIdClient(); ?>" class="btn btn-default addVisit" type="button">Adauga vizita</button>           
+                  <?php }?>
+            <div class="clear">&nbsp;</div>
+            <?php if($this->resultAgent->getProducts()){ ?>
+            <p>Produse comercializate : <b><?php echo $this->resultAgent->getProducts(); ?></b></p>                        
+            <?php } ?>
+        </div>
+      </div>      
+    </div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(document).ready(function (e) {   
+//    add visit and comment by clientId    
+    $('.addVisit').click(function (e) {
+        e.preventDefault(); 
+
+        var comment = $('.addComment').val();
+        var visitDate = $('.datepicker').val();
+        var clientId = $(this).attr('id');
+        var agentId = "<?php echo $this->resultAgent->getIdAgent() ?>";      
+
+        if(visitDate !== "" && comment !== "") {
+            $.ajax({
+                type:"POST",
+                url: "<?php echo WEBROOT; ?>ajax/add-visit",
+                data:{agentId: agentId, clientId: clientId, visitDate: visitDate, comment: comment}                   
+            })
+            .done(function(){         
+                alert('Vizita a fost adaugata cu succes!'); 
+                window.location.reload();
+            });
+        }else{
+            alert('Selecteaza data vizitei si adauga un comentariu!');
+        }
+    });
+    
+//    get comment by date               
+    $('.selectVisit').change(function (e) {
+        e.preventDefault();
+        
+        var visitDate = $(this).val();
+        var clientId = $(this).attr('name'); 
+        var agentId = "<?php echo $this->resultAgent->getIdAgent() ?>";
+//        var comment = $('.addComment').val();
+        var comment = '';      
+        
+        $.ajax({
+            type:"POST",
+            url:"<?php echo WEBROOT; ?>ajax/get-comment",
+            data: {visitDate: visitDate, clientId: clientId, agentId: agentId}
+        })
+        .done(function(msg){
+            if(msg){
+                data = jQuery.parseJSON(msg);
+            }
+
+            if(data){                    
+                comment=data;                                                                                    
+            };     
+           
+            $('#getComment'+clientId).html(comment); 
+        });         
+        return false;
+    });
+});
+    //    delete visit and comment by id    
+    function deleteComment(id) {        
+
+        $.ajax({
+            type:"POST",
+            url: "<?php echo WEBROOT; ?>ajax/delete-visit",
+            data:{id: id}                   
+        })
+        .done(function(){         
+                window.location.reload();
+        });        
+    };
+</script>

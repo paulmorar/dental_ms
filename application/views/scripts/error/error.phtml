@@ -1,0 +1,29 @@
+<div class="content">
+    <?php if ($this->message == 'Page not found'): ?>
+			<h1 style="font-size: 30px;"><?php echo Zend_Registry::get('translate')->_('ERROR_404_NOT_FOUND'); ?></h1>	
+			<a class="btn btn-lg btn-default-outline" style="display: block; margin: 20px 0px;" href="<?php echo WEBROOT ?>"><i class="fa fa-home"></i><?php echo Zend_Registry::get('translate')->_('ERROR_RETURN_HOME'); ?></a>
+    <?php endif;?>
+
+    <?php if ('testing' == APPLICATION_ENV): ?>
+        <div class="a404" style="position: absolute; top: 0;left: 0;">
+            <div class="empty10"></div>
+            <p>Informatii eroare - doar pentru testare(nu apare pe varianta production)</p>
+            <div class="box">
+                <p><strong>Mesaj:</strong>&nbsp;<?php echo $this->exception->getMessage(); ?></p>
+            </div>
+
+            <div class="empty10"></div>
+            <p>Date despre stiva:</p>
+            <div class="box">
+                <p><?php echo nl2br($this->exception->getTraceAsString()); ?></p>
+            </div>
+
+            <div class="empty10"></div>
+            <p>Parametrii solicitati:</p>
+            <div class="box">
+                <pre><?php echo var_export($this->request->getParams(), true); ?></pre>
+            </div>
+        </div>
+    <?php endif ?>		
+</div>
+		

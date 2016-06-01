@@ -1,0 +1,92 @@
+<form id="<?php echo $this->element->getId();?>" class="<?php echo $this->element->getAttrib('class');?>" action="<?php echo $this->element->getAction();?>" method="<?php echo $this->element->getMethod();?>" enctype="<?php echo $this->element->getEncType();?>">
+    <div class="box-body">
+        <div class="form-group">
+            <?php echo $this->{$this->element->nume->helper}(
+                $this->element->nume->getName(),
+                $this->element->nume->getValue(),
+                $this->element->nume->getAttribs()
+            );?>                    
+            <?php if(($this->element->nume->getMessages())){ echo  $this->formErrors($this->element->nume->getMessages());}?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->{$this->element->nivel1->helper}(
+                $this->element->nivel1->getName(),
+                $this->element->nivel1->getValue(),
+                $this->element->nivel1->getAttribs(),
+                $this->element->nivel1->getMultiOptions()
+            );?>                    
+            <?php if(($this->element->nivel1->getMessages())){ echo  $this->formErrors($this->element->nivel1->getMessages());}?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->{$this->element->nivel2->helper}(
+                $this->element->nivel2->getName(),
+                $this->element->nivel2->getValue(),
+                $this->element->nivel2->getAttribs(),
+                $this->element->nivel2->getMultiOptions()
+            );?>                    
+            <?php if(($this->element->nivel2->getMessages())){ echo  $this->formErrors($this->element->nivel2->getMessages());}?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->{$this->element->telefon->helper}(
+                $this->element->telefon->getName(),
+                $this->element->telefon->getValue(),
+                $this->element->telefon->getAttribs()
+            );?>                    
+            <?php if(($this->element->telefon->getMessages())){ echo  $this->formErrors($this->element->telefon->getMessages());}?>
+        </div>                                                  
+        <div class="form-group">
+            <?php echo $this->{$this->element->email->helper}(
+                $this->element->email->getName(),
+                $this->element->email->getValue(),
+                $this->element->email->getAttribs()
+            );?>                    
+            <?php if(($this->element->email->getMessages())){ echo  $this->formErrors($this->element->email->getMessages());}?>
+        </div>                                                  
+        <div class="form-group">
+            <?php echo $this->{$this->element->adresa->helper}(
+                $this->element->adresa->getName(),
+                $this->element->adresa->getValue(),
+                $this->element->adresa->getAttribs()
+            );?>                    
+            <?php if(($this->element->adresa->getMessages())){ echo  $this->formErrors($this->element->adresa->getMessages());}?>
+        </div>                                                  
+        <div class="form-group">
+            <?php echo $this->{$this->element->firma->helper}(
+                $this->element->firma->getName(),
+                $this->element->firma->getValue(),
+                $this->element->firma->getAttribs()
+            );?>                    
+            <?php if(($this->element->firma->getMessages())){ echo  $this->formErrors($this->element->firma->getMessages());}?>
+        </div>                                                  
+        <?php echo $this->{$this->element->submit->helper}(
+            $this->element->submit->getName(),
+            $this->element->submit->getValue(),
+            $this->element->submit->getAttribs()
+        );?>
+    </div>
+</form>
+<div class="clear"></div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#<?php echo $this->element->getId();?>').validationEngine('attach', {promptPosition : "centerRight"});
+    
+    $("#nivel1").unbind().change(function()
+    {
+        getNivel2();
+    });
+});
+
+function getNivel2()
+{
+    var id_nivel1=$("#nivel1").val();
+    $.ajax({
+        type: "POST",
+        url: "<?php echo WEBROOT; ?>ajax/get-nivel2",
+        data: "id_nivel1="+id_nivel1+""
+        }).done(function(response){
+//            var options = jQuery.parseJSON(response);
+            $( 'select[name="nivel2"]' ).empty();
+            $( 'select[name="nivel2"]' ).append( response );
+    });
+}
+</script>

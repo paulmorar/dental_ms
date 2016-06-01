@@ -1,0 +1,13 @@
+SetEnv APPLICATION_ENV development
+Options +Indexes
+ErrorDocument 403 /403.html
+
+RewriteEngine On
+RewriteBase /dental_ms
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]

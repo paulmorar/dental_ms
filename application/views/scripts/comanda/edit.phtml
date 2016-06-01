@@ -1,0 +1,22 @@
+<!-- BEGIN: Show error messages -->
+<?php if(!empty($this->message)):?>
+	<?php foreach($this->message as $value):?>
+		<center><?php echo $value; ?></center>
+	<?php endforeach; ?>
+	<div class="clearfix">&nbsp;</div>
+<?php endif;?>
+<!-- END: Show error messages -->
+<div class="col-md-6">
+<button class="btn btn-primary" onclick="location.href='<?php echo WEBROOT; ?>comanda'" title="<?php echo Zend_Registry::get('translate')->_('back'); ?> " >&laquo; <?php echo Zend_Registry::get('translate')->_('back'); ?></button>
+
+<div class="clear">&nbsp;</div>
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Editeaza comanda</h3>
+          <span class="fr"><?php echo $this->data; ?></span>
+        </div>
+        <?php echo $this->formEditComanda; ?>
+    </div>
+</div>
+
