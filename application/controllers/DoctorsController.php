@@ -44,10 +44,10 @@ class DoctorsController extends Zend_Controller_Action{
             {
                 if($form->isValid($this->getRequest()->getPost()))
                 {
+                    $password	= $form->getValue('password');
 
                     $model->setOptions($form->getValues());
                     $model->setIdRole(2);
-                    $password	= $form->getValue('password');
                     $model->setPassword(md5($password)); //generare parola random la inregistrare user
 
 
@@ -86,63 +86,6 @@ class DoctorsController extends Zend_Controller_Action{
                         if ($form->isValid($this->getRequest()->getPost())) {
                                 $model->setOptions($form->getValues());
                                 if ($model->save()) {
-                                        $modelRole = new Default_Model_ResourceRole();
-
-                                        $modelRole->setIdRole($id);
-                                        $modelRole->setIdResource(2);
-                                        $modelRole->save();
-
-                                        $modelRole2 = new Default_Model_ResourceRole();
-
-                                        $modelRole2->setIdRole($id);
-                                        $modelRole2->setIdResource(34);
-                                        $modelRole2->save();
-                                        if($form->getValue('idRole') == 2){
-                                            //drepturi adaugare / editare / stergere comenzi
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(35);
-                                            $modelRole2->save();
-
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(36);
-                                            $modelRole2->save();
-
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(37);
-                                            $modelRole2->save();
-
-                                             //drepturi adaugare / editare / stergere clienti
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(3);
-                                            $modelRole2->save();
-
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(38);
-                                            $modelRole2->save();
-
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(39);
-                                            $modelRole2->save();
-
-                                            $modelRole2 = new Default_Model_ResourceRole();
-
-                                            $modelRole2->setIdRole($id);
-                                            $modelRole2->setIdResource(40);
-                                            $modelRole2->save();
-                                        }
-
 
                                         $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                             . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"

@@ -83,6 +83,7 @@
                   <p><?php echo $text; ?></p>
               </td>
           </tr>
+          <?php if($this->role == 2){ ?>
           <tr>
               <td style="width:20%;" class="category"><strong>Adauga observatie</strong></td>
               <td>
@@ -94,6 +95,7 @@
                 </form>
               </td>
           </tr>
+          <?php } ?>
         </tbody>
       </table>
       <?php }

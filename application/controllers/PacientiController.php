@@ -25,8 +25,12 @@ class PacientiController extends Zend_Controller_Action{
                             ->from(array('u'=>'users'), array('*'))
                             ->joinLeft(array('r'=>'role'), 'r.id=u.idRole',array('idRole'=>'r.name'))
                             ->where('NOT u.deleted')
-                            ->where('u.idRole = ?', 3)
-                            ->where('u.idDoctor = ?', $this->userId);
+                            ->where('u.idRole = ?', 3);
+                            if($this->roleId == 3){
+                                $select->where('u.id = ?', $this->userId);
+                            } else {
+                                $select->where('u.idDoctor = ?', $this->userId);
+                            }
             $select->order('u.created DESC');
             $select->setIntegrityCheck(false);
             $result = $model->fetchAll($select);
@@ -40,7 +44,7 @@ class PacientiController extends Zend_Controller_Action{
       if($this->getRequest()->isPost())
         {
             $model = new Default_Model_Observations();
-            $model->setUserId($id);
+            $model->setUser($id);
             $model->setObservation($this->getRequest()->getParam('observatie'));
 
             if($model->save())
@@ -61,23 +65,25 @@ class PacientiController extends Zend_Controller_Action{
 
             $this->_redirect('/pacienti/show/id/'.$id);
 
+        } else {
+              if ($this->roleId == 3)
+              {
+                  $id = $this->userId;
+              }
+
+              $model = new Default_Model_Users();
+              $select = $model->getMapper()->getDbTable()->select()
+                  ->from(array('u'=>'users'), array('*'))
+                  ->where('NOT u.deleted')
+                  ->where('u.id = ?', $id);
+              $select->order('u.created DESC');
+              $result = $model->fetchAll($select);
+
+              $this->view->result = $result;
+              $this->view->role   = $this->roleId;
         }
 
-        if ($this->roleId == 3)
-          {
-            $id = $this->userid;
-          }
 
-        $model = new Default_Model_Users();
-        $select = $model->getMapper()->getDbTable()->select()
-                        ->from(array('u'=>'users'), array('*'))
-                        ->where('NOT u.deleted')
-                        ->where('u.id = ?', $id);
-        $select->order('u.created DESC');
-        $select->setIntegrityCheck(false);
-        $result = $model->fetchAll($select);
-
-        $this->view->result = $result;
 
   }
 
@@ -93,11 +99,11 @@ class PacientiController extends Zend_Controller_Action{
       {
           if($form->isValid($this->getRequest()->getPost()))
           {
+              $password	= $form->getValue('password');
 
               $model->setOptions($form->getValues());
               $model->setIdRole(3);
               $model->setIdDoctor($this->userId);
-              $password	= $form->getValue('password');
               $model->setPassword(md5($password)); //generare parola random la inregistrare user
 
 
@@ -136,13 +142,6 @@ class PacientiController extends Zend_Controller_Action{
                         if ($form->isValid($this->getRequest()->getPost())) {
                                 $model->setOptions($form->getValues());
                                 if ($model->save()) {
-                                        // $modelRole = new Default_Model_ResourceRole();
-                                        //
-                                        // $modelRole->setIdRole($id);
-                                        // $modelRole->setIdResource(2);
-                                        // $modelRole->save();
-
-
 
                                         $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                             . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"

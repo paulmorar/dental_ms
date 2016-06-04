@@ -219,8 +219,11 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                                         case 'login' :
                                                 $layout->getView()->headTitle('Login', 'SET');
                                                 if(!$acl->isAllowed($accountRole,'default:auth', 'login')) {
+                                                    if($accountRole == 3){
+                                                        $this->_response->setRedirect(WEBROOT.'pacienti/show/id/1');
+                                                    } else {
                                                         $this->_response->setRedirect(WEBROOT.'pacienti');
-
+                                                    }
                                                 }
                                                 break;
                                         default:
