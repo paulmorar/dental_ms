@@ -1,0 +1,66 @@
+<header class="main-header">
+    <!-- Logo -->
+    <a href="index2.html" class="logo">
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Dental MS</b></span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+            <?php
+            $auth	 = Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
+            if($auth->hasIdentity()){
+                $accountAuth = $auth->getStorage()->read();
+                if($accountAuth->getIdRole() == 1){
+                    $class = '';
+                } else {
+                    $class = 'hidden';
+                }
+            }
+
+            ?>
+            <li class="user-header <?php echo $class; ?>" style="margin-top: 17px;color: #fff;margin-right: 30px;">
+                <form class="form-horizontal">
+                    <div class="input-prepend">
+                      <span class="add-on"><i id="selectdaterange" class="fa fa-calendar"></i></span>
+                    </div>
+                </form>
+                <form id="formDate" class="form-horizontal" method="GET">
+                    <input type="hidden" id="startDate" name="start" value="">
+                    <input type="hidden" id="endDate" name="end" value="">
+                </form>
+                <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#selectdaterange').daterangepicker();
+                    $('.applyBtn').on('click',function(){
+                        var startdate = $('.dataStart').val();
+                        var enddate   = $('.dataEnd').val();
+                        $('#startDate').val(startdate);
+                        $('#endDate').val(enddate);
+                        $('#formDate').submit();
+                    });
+                });
+                </script>
+            </li>
+            <li class="user-header" style="margin-top: 14px;color: #fff;">
+                <?php
+                    if($auth->hasIdentity()){
+                        $accountAuth = $auth->getStorage()->read();
+                        echo $accountAuth->getName();
+                    } else {
+                        echo 'Unknown';
+                    }
+
+                ?>
+            </li>
+            <li>
+                <a href="<?php echo WEBROOT; ?>auth/logout"><i class="glyphicon glyphicon-log-out"></i></a>
+            </li>
+        </ul>
+      </div>
+
+    </nav>
+</header>

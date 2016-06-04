@@ -1,0 +1,28 @@
+<html>
+<head>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headMeta()
+		->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+		->appendHttpEquiv('Content-Language', 'ro-RO')
+		->appendHttpEquiv('expires', 'Wed, 26 Feb 2013 08:21:57 GMT')
+		->appendHttpEquiv('pragma', 'no-cache')
+		->appendHttpEquiv('Cache-Control', 'no-cache');
+	?>
+	<?php echo $this->headLink();?> 
+	<?php echo $this->headStyle();?>
+	<?php echo $this->headScript();?>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+</head>
+    <body class="sidebar-mini skin-blue-light wysihtml5-supported">
+        <div class="wrapper">
+            <?php echo $this->render('header_user.phtml') ?>
+            <div class="content-wrapper" style="margin-left: 0 !important;">
+                <section class="content">
+                <?php echo $this->layout()->content ?>
+                </section>
+            </div>               
+        </div>
+        <?php echo $this->render('footer_user.phtml') ?>
+    </body>
+</html>

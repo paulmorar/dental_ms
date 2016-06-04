@@ -164,7 +164,7 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                 // Create container from array
                 $container = new Zend_Navigation($pages);
                 $layout->getView()->navigation($container)->setAcl($acl)->setRole($accountRole);
-                $layout->getView()->headTitle('Photo Fuji', 'SET');
+                $layout->getView()->headTitle('Dental MS', 'SET');
 
                 $stylesheets = $layout->getView()->headLink();
                 $stylesheets->appendStylesheet(WEBROOT . 'theme/css/bootstrap.min.css');
@@ -221,8 +221,10 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                                                 if(!$acl->isAllowed($accountRole,'default:auth', 'login')) {
                                                     if($accountRole == 3){
                                                         $this->_response->setRedirect(WEBROOT.'pacienti/show/id/1');
+                                                        $layout->setLayout('layout_user');
                                                     } else {
                                                         $this->_response->setRedirect(WEBROOT.'pacienti');
+                                                        $layout->setLayout('layout');
                                                     }
                                                 }
                                                 break;
@@ -231,7 +233,11 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                                 }
                                 break;
                         default :
+                            if($accountRole == 3){
+                                $layout->setLayout('layout_user');
+                            } else {
                                 $layout->setLayout('layout');
+                            }
 
                     if(!$acl->has($module.':'.$controller.':'.$action)){
                         $acl->add(new Zend_Acl_Resource($module.':'.$controller.':'.$action));
