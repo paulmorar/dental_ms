@@ -36,6 +36,7 @@
               <td> <?php echo $value->getPhone_number(); ?> </td>
               <td> <?php echo $value->getAddress(); ?> </td>
               <td>
+                  <a href='<?php echo WEBROOT; ?>pacienti/show/id/<?php echo $value->getId(); ?>' title='Vizualizeaza' class='margin-r-5'><i class='fa fa-eye'></i></a>
                   <a href='<?php echo WEBROOT; ?>pacienti/edit/id/<?php echo $value->getId(); ?>' title='Editeaza' class='margin-r-5'><i class='fa fa-edit'></i></a>
                   <a href='#0' title='Sterge' data-toggle="modal" data-target="#modal-<?php echo $value->getId(); ?>"><i class='fa fa-remove'></i></a>
               </td>

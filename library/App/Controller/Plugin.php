@@ -197,9 +197,6 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                 $javascripts->prependFile(WEBROOT.'theme/js/jquery.fancybox.js');
                 $javascripts->prependFile(WEBROOT.'theme/plugins/jQuery/jQuery-2.1.4.min.js');
 
-
-
-
                 switch($controller) {
                         case 'error':
                                 switch($action) {
@@ -222,7 +219,7 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                                         case 'login' :
                                                 $layout->getView()->headTitle('Login', 'SET');
                                                 if(!$acl->isAllowed($accountRole,'default:auth', 'login')) {
-                                                        $this->_response->setRedirect(WEBROOT.'comanda');
+                                                        $this->_response->setRedirect(WEBROOT.'pacienti');
 
                                                 }
                                                 break;

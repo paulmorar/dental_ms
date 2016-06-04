@@ -9,6 +9,7 @@ class Default_Model_Users
 {
 	protected $_id;
 	protected $_idRole;
+	protected $_idDoctor;
 	protected $_role;
 	protected $_email;
 	protected $_name;
@@ -76,31 +77,42 @@ class Default_Model_Users
 	}
 
 	public function setIdRole($roleId)
-        {
-            $model = new Default_Model_Role();
-            if($model->find($roleId))
-            {
-                    $this->setRole($model);
-            }
-            $this->_idRole = $roleId;
-            return $this;
-        }
+  {
+      $model = new Default_Model_Role();
+      if($model->find($roleId))
+      {
+              $this->setRole($model);
+      }
+      $this->_idRole = $roleId;
+      return $this;
+  }
 
-        public function getIdRole()
-        {
-            return $this->_idRole;
-        }
+  public function getIdRole()
+  {
+      return $this->_idRole;
+  }
 
-        public function setRole(Default_Model_Role $var)
-        {
-            $this->_role = $var;
-            return $this;
-        }
+	public function setIdDoctor($doctorId)
+  {
+      $this->_idDoctor = $doctorId;
+      return $this;
+  }
 
-        public function getRole()
-        {
-            return $this->_role;
-        }
+  public function getIdDoctor()
+  {
+      return $this->_idDoctor;
+  }
+
+  public function setRole(Default_Model_Role $var)
+  {
+      $this->_role = $var;
+      return $this;
+  }
+
+  public function getRole()
+  {
+      return $this->_role;
+  }
 
 	public function setEmail($value)
 	{
@@ -385,6 +397,7 @@ class Default_Model_UsersMapper
 
                         $data = array(
                             'idRole'				=> $value->getIdRole(),
+                            'idDoctor'			=> $value->getIdDoctor(),
                             'email'					=> $value->getEmail(),
                             'name'					=> $value->getName(),
                             'password'			=> $value->getPassword(),
