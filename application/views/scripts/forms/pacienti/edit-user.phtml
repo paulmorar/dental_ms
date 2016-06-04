@@ -83,6 +83,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#<?php echo $this->element->getId();?>').validationEngine('attach', {promptPosition : "centerRight"});
-  $('#birth_date').datepicker();
+    $('#birth_date').datepicker({changeYear: true, yearRange: "-100:+0"});
 });
 </script>

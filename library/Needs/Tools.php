@@ -1,53 +1,6 @@
 <?php
 class Needs_Tools
-{	
-    public static function findAdmins($id=NULL){
-        $modelu = new Default_Model_Users();
-        if (!isset($id)){
-        $select = $modelu->getMapper()->getDbTable()->select()
-                ->from(array('u'=>'users'),array('u.email'))
-                ->joinLeft(array('r'=>'role'), 'u.`idRole` = r.`id`',array(''))
-                ->where('r.`isAdmin` = ?', '1')
-                ->setIntegrityCheck(false);
-        }else{
-        $select = $modelu->getMapper()->getDbTable()->select()
-                ->from(array('u'=>'users'),array('u.id'))
-                ->joinLeft(array('r'=>'role'), 'u.`idRole` = r.`id`',array(''))
-                ->where('r.`isAdmin` = ?', '1')
-                ->setIntegrityCheck(false);
-        }
-        $result=$modelu->fetchAll($select);
-        $return=null;
-        if ($result){
-                foreach ($result as $res){
-                        if (!isset($id)){
-                                $array[]=$res->getEmail();
-                        }else{
-                                $array[]=$res->getId();
-                        }
-                }
-                $return=$array;
-        }
-        return $return;
-    }
-
-    public static function checkApi($apiKey=NULL){
-            $model = new Default_Model_UsersFront();
-            if (isset($apiKey)){
-                    $select = $model->getMapper()->getDbTable()->select()
-                            ->where('`apiKey` = ?', $apiKey);
-                    $result=$model->fetchRow($select);
-                    if (count($result)>0){
-                            $idUser=$result->getId();
-                            return $idUser;
-                    }
-                    else
-                            return false;
-            }else{
-                    return false;
-            }
-    }
-
+{
     public static function paginatorToModel($paginator,$modelName)
     {		
             $entries = array();
@@ -116,83 +69,15 @@ class Needs_Tools
      * - SMTP_PORT
      * - SMTP_URL
      */
-    public static function sendEmail($emailArray, $departamentId, $numeComanda,$emailClient)
+    public static function sendEmail($utilizator, $password, $doctor)
     {
-            $emailArray['toEmail']		= (!empty($emailArray['toEmail']))?$emailArray['toEmail']:'';
-            $emailArray['toName']		= (!empty($emailArray['toName']))?$emailArray['toName']:'';
-            $emailArray['fromEmail']            = (!empty($emailArray['fromEmail']))?$emailArray['fromEmail']:'';
-            $emailArray['fromName']		= (!empty($emailArray['fromName']))?$emailArray['fromName']:'';
-            $emailArray['content']		= (!empty($emailArray['content']))?$emailArray['content']:'';
-            $emailArray['subject']		= (!empty($emailArray['subject']))?$emailArray['subject']:'';
-            
-            $emailArray['SMTP_USERNAME'] = 'noreply@photofuji.ro';
-            $emailArray['SMTP_PASSWORD'] = 'clau2012photofuji';
-            $emailArray['SMTP_PORT']     = 587;
-            $emailArray['SMTP_URL']      = 'smtp.1and1.es';
-            
-            
-            if((!empty($emailArray['SMTP_USERNAME'])) && (!empty($emailArray['SMTP_PASSWORD'])) && (!empty($emailArray['SMTP_PORT'])) && (!empty($emailArray['SMTP_URL'])))
-            {
-                    $config = array(
-                            'ssl'               => 'tls',
-                            'auth'		=> 'login',
-                            'username'          => $emailArray['SMTP_USERNAME'],
-                            'password'          => $emailArray['SMTP_PASSWORD'],
-                            'port'		=> $emailArray['SMTP_PORT']
-                            
-//                            'port'              => 587,
-//                            'auth'              => 'login',
-//                            'username'          => 'brinduse.claudiu@gmail.com',
-//                            'password'          => 'Claudiu1',
-                            
-                    );
-                    $transport = new Zend_Mail_Transport_Smtp($emailArray['SMTP_URL'], $config);
-//                    print_r($transport);die();
-            }
-            switch ($departamentId) {
-                case 3:
-                    //MACHETARE
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' este in departamentul machetare. <br> O sa fiti anuntat cand comanda dumneavoastra trece in alt departament sau isi schimba statusul. <br> O zi buna,<br> Echipa Photo Fuji';
+            $fromEmail	= 'noreply@dentalms.ro';
+            $fromName	= 'Dental MS - No Reply';
+            $subject	= 'Contul Dumneavoastra';
 
-                break;
-                case 90:
-                    //CONFIRMARE MACHETARE
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' asteapta confirmarea machetarii. <br> O sa fiti anuntat cand comanda dumneavoastra trece in alt departament sau isi schimba statusul. <br> O zi buna,<br> Echipa Photo Fuji';
+            $toEmail	= $utilizator;
 
-                break;
-                case 4:
-                    //MINILAB
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' este in departamentul minilab. <br> O sa fiti anuntat cand comanda dumneavoastra trece in alt departament sau isi schimba statusul. <br> O zi buna,<br> Echipa Photo Fuji';
-
-                break;
-                case 5:
-                    //LEGATORIE
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' este in departamentul legatorie. <br> O sa fiti anuntat cand comanda dumneavoastra trece in alt departament sau isi schimba statusul. <br> O zi buna,<br> Echipa Photo Fuji';
-
-                break;
-                case 6:
-                    //EXPEDIERE
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' urmeaza sa fie expediata. <br> O sa fiti anuntat cand comanda dumneavoastra trece in alt departament sau isi schimba statusul. <br> O zi buna,<br> Echipa Photo Fuji';
-
-                break;
-                case 91:
-                    //EXPEDIAT
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' a fost expediata. <br> O zi buna,<br> Echipa Photo Fuji';
-
-                break;
-
-                default:
-                    //EXPEDIAT
-                    $contents	= 'Buna ziua, <br> Comanda '. $numeComanda .' a trecut in alt departament. <br> O zi buna,<br> Echipa Photo Fuji';
-                    break;
-            }
-            
-            
-            $fromEmail	= $emailArray['SMTP_USERNAME'];
-            $fromName	= 'Photofuji Gestiune - No Reply';
-            $subject	= 'Comanda Dumneavoastra';
-
-            $toEmail	= $emailClient;
+            $contents	= 'Buna ziua, <br> V-a fost alocat cont in sistemul doctorului '.$doctor .'. <br> Folosind utilizatorul:'.$utilizator.' si parola '. $password .' <br> O zi buna,<br> Echipa Dental MS';
 
 
             $mail = new Zend_Mail('UTF-8');
@@ -202,25 +87,13 @@ class Needs_Tools
             $mail->setSubject($subject);
             
                 try {
-                    if((!empty($emailArray['SMTP_USERNAME'])) && (!empty($emailArray['SMTP_PASSWORD'])))
+                    if($mail->send())
                     {
-                        if($mail->send($transport))
-                        {
-
-                               // return true;
-                        }		
-                    }
-                    else 
-                    {
-                        if($mail->send())
-                        {
-                               // return true;	
-                        }
+                            return true;
                     }
                 } catch (Exception $exc) {
                         echo $exc->getTraceAsString();
                 }
-//            }
             return false;
     }
     

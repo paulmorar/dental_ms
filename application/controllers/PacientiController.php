@@ -14,6 +14,7 @@ class PacientiController extends Zend_Controller_Action{
             if (null!=$authAccount->getId()) {
                 $this->userId = $authAccount->getId();
                 $this->roleId = $authAccount->getIdRole();
+                $this->name = $authAccount->getName();
             }
         }
 	}
@@ -104,12 +105,11 @@ class PacientiController extends Zend_Controller_Action{
               $model->setOptions($form->getValues());
               $model->setIdRole(3);
               $model->setIdDoctor($this->userId);
-              $model->setPassword(md5($password)); //generare parola random la inregistrare user
+              $model->setPassword(md5($password));
 
 
               if($id = $model->save())
               {
-
                   $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                       . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
                                                       . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Utilizatorul a fost adaugat cu succes."

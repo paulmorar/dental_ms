@@ -265,3 +265,13 @@ li.L9 {
 .margin-t-20{
     margin-top: 20px;
 }
+
+.ui-datepicker-prev span {
+    background-image: url(http://legacy.australianetwork.com/img/icon_arrow_left_black.png) !important;
+    background-position: 0px 0px !important;
+}
+
+.ui-datepicker-next span {
+    background-image: url(http://legacy.australianetwork.com/img/icon_arrow_right_black.png) !important;
+    background-position: 0px 0px !important;
+}
