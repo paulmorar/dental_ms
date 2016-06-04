@@ -407,89 +407,6 @@ class Needs_Tools
             }
             return $thisWeekDate;
     }
-
-    public static function getClientByComandaId($id){
-        $model = new Default_Model_Clients();
-        $select = $model->getMapper()->getDbTable()->select()
-                ->from(array('cl'=>'clienti'))
-                ->joinLeft(array('c'=>'comanda_to_client'), 'c.`client_id` = cl.`id`', array('idComandaToClient'=>'c.id'))
-                ->joinLeft(array('co'=>'comenzi'), 'c.`comanda_id` = co.`id`', array('idComanda'=>'co.id'))
-                ->where('co.`id`= ?', $id)
-                ->where('NOT co.`deleted`')
-                ->where('NOT cl.`deleted`')
-                ->setIntegrityCheck(false);
-
-        $result = $model->fetchRow($select);
-
-        return $result;
-    }
-
-    public static function getTipComandaById($id){
-        $model = new Default_Model_TipComanda();
-        $select = $model->getMapper()->getDbTable()->select()
-                ->from(array('t'=>'tip_comanda'))
-                ->where('t.`id`= ?', $id)
-                ->where('NOT t.`deleted`');
-
-        $result = $model->fetchRow($select);
-        if($result){
-            return $model->getNume();
-        } else {
-            return '-';
-        }
-    }
-
-    public static function getClients(){
-        $model = new Default_Model_Clients();
-        $select = $model->getMapper()->getDbTable()->select()
-                ->from(array('c'=>'clienti'))
-                ->where('NOT c.`deleted`');
-
-        $result = $model->fetchAll($select);
-
-        if($result){
-            return $result;
-        } else {
-            return null;
-        }
-    }
-    
-    public static function getStatusComandaById($id){
-        $model = new Default_Model_Comanda();
-        $select = $model->getMapper()->getDbTable()->select()
-                ->where('NOT deleted')
-                ->where('id ='.$id);
-
-        $result = $model->fetchRow($select);
-        if($result){
-            return $result->getIncomplet();
-        } else {
-            return null;
-        }
-    }
-    public static function getComandaById($id)
-    {
-            $model  = new Default_Model_Comanda();		 
-            $model->find($id);		
-            return $model;		
-    }
-    
-    public static function getDepartamentComandaById($id){
-        
-        $departamentEdit     = new Default_Model_Users();
-        $selectDep = $departamentEdit->getMapper()->getDbTable()->select()->from(array('u'=>'users'), array('*'))				
-                                ->joinLeft(array('cd'=>'comanda_to_departament'), 'u.id=cd.departament_id',array())
-                                ->where('NOT deleted')
-                                ->where('cd.comanda_id  ='.$id)
-                                ->order('id DESC')
-                                ->setIntegrityCheck(false);
-        $resultDep = $departamentEdit->fetchRow($selectDep);
-        if($resultDep){
-            return $resultDep;         
-        } else {
-            return null;
-        }
-    }
     
     public static function getUserByRole($id){
         
@@ -506,43 +423,6 @@ class Needs_Tools
         } else {
             return false;
         }
-    }
-    
-    public static function getDepByComanda($id){
-        
-        $model = new Default_Model_ComandaToDepartament();
-        $select = $model->getMapper()->getDbTable()->select()
-                ->from(array('c'=>'comanda_to_departament'))
-                ->where('c.`comanda_id`= ?', $id);
-
-        $result = $model->fetchRow($select);
-        
-        if($result){
-            return $result->getDepartamentId();
-        } else {
-            return false;
-        }
-    }
-    
-    
-    public static function getComenziTipNr($id,$start = null,$end = null){
-        
-        $model  = new Default_Model_Comanda();
-        $select = $model->getMapper()->getDbTable()->select()
-                        ->from(array('c'=>'comenzi'), array('total'=>'COUNT(*)'))
-                        ->where('c.tip = '.$id)
-                        ->where('NOT c.deleted');
-        if($start && $end){
-            $select->where("(DATE(c.created) >= '".$start."' AND DATE(c.created) <= '".$end."')");
-        }
-        $result = $model->fetchRow($select);
-
-        if($result){
-            return $result->getTotal();
-        } else {
-            return 0;
-        }
-        
     }
     
     public static function getNivel1ById($id){
@@ -569,5 +449,20 @@ class Needs_Tools
                 return '-';
             }
             
+    }
+
+    public static function getObservationsByPacient($id){
+
+        $model = new Default_Model_Observations();
+        $select = $model->getMapper()->getDbTable()->select()
+            ->from(array('o'=>'observations'))
+            ->where('o.`user`= ?', $id);
+        $result = $model->fetchAll($select);
+
+        if($result){
+            return $result;
+        } else {
+            return false;
+        }
     }
 }

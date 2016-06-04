@@ -36,22 +36,49 @@ class PacientiController extends Zend_Controller_Action{
 
   public function showAction()
   {
-            $id = $this->getRequest()->getParam('id');
-            if ($this->roleId == 3)
-              {
-                $id = $this->userid;
-              }
+      $id = $this->getRequest()->getParam('id');
+      if($this->getRequest()->isPost())
+        {
+            $model = new Default_Model_Observations();
+            $model->setUserId($id);
+            $model->setObservation($this->getRequest()->getParam('observatie'));
 
-            $model = new Default_Model_Users();
-            $select = $model->getMapper()->getDbTable()->select()
-                            ->from(array('u'=>'users'), array('*'))
-                            ->where('NOT u.deleted')
-                            ->where('u.id = ?', $id);
-            $select->order('u.created DESC');
-            $select->setIntegrityCheck(false);
-            $result = $model->fetchAll($select);
+            if($model->save())
+            {
 
-            $this->view->result = $result;
+              $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
+                  . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
+                  . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Observatia a fost adaugata cu succes."
+                  . "</div>");
+            }
+            else
+            {
+              $this->_flashMessenger->addMessage("<div class='alert alert-danger alert-dismissible'>"
+                  . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
+                  . "<h4><i class='icon fa fa-ban'></i> Eroare! </h4>A existat o eroare. Va rugam incercati din nou."
+                  . "</div>");
+            }
+
+            $this->_redirect('/pacienti/show/id/'.$id);
+
+        }
+
+        if ($this->roleId == 3)
+          {
+            $id = $this->userid;
+          }
+
+        $model = new Default_Model_Users();
+        $select = $model->getMapper()->getDbTable()->select()
+                        ->from(array('u'=>'users'), array('*'))
+                        ->where('NOT u.deleted')
+                        ->where('u.id = ?', $id);
+        $select->order('u.created DESC');
+        $select->setIntegrityCheck(false);
+        $result = $model->fetchAll($select);
+
+        $this->view->result = $result;
+
   }
 
   public function addAction()

@@ -1,15 +1,16 @@
 <?php
-class Default_Model_DbTable_ComandaToClient extends Zend_Db_Table_Abstract
+class Default_Model_DbTable_Observations extends Zend_Db_Table_Abstract
 {
-	protected $_name    = 'comanda_to_client';
+	protected $_name    = 'observations';
 	protected $_primary = 'id';
 }
 
-class Default_Model_ComandaToClient
+class Default_Model_Observations
 {
 	protected $_id;
-	protected $_comanda_id;	
-	protected $_client_id;	
+	protected $_user;
+	protected $_observation;
+	protected $_created;
 
 	protected $_mapper;
 	
@@ -42,12 +43,14 @@ class Default_Model_ComandaToClient
 	{
             $methods = get_class_methods($this);
             foreach($options as $key => $value) {
+
                     $method = 'set' . ucfirst($key);
                     if(in_array($method, $methods)) {
                             $this->$method(stripcslashes($value));
                     }
             }
-            return $this;
+
+        return $this;
 	}
 
 	public function setId($id)
@@ -61,27 +64,38 @@ class Default_Model_ComandaToClient
             return $this->_id;
 	}
     
-	public function setComandaId($id)
+	public function setUser($id)
 	{
-            $this->_comanda_id = (int) $id;
+            $this->_user = (int) $id;
+
             return $this;
 	}
 
-	public function getComandaId()
+	public function getUser()
 	{
-            return $this->_comanda_id;
+            return $this->_user;
 	}
     
-	public function setClientId($id)
+	public function setObservation($value)
 	{
-            $this->_client_id = (int) $id;
+            $this->_observation = $value;
             return $this;
 	}
 
-	public function getClientId()
+	public function getObservation()
 	{
-            return $this->_client_id;
+            return $this->_observation;
 	}
+    public function setCreated($value)
+    {
+        $this->_created = $value;
+        return $this;
+    }
+
+    public function getCreated()
+    {
+        return strtotime($this->_created);
+    }
     
 	public function setMapper($mapper)
 	{
@@ -92,7 +106,7 @@ class Default_Model_ComandaToClient
 	public function getMapper()
 	{
             if(null === $this->_mapper) {
-                    $this->setMapper(new Default_Model_ComandaToClientMapper());
+                    $this->setMapper(new Default_Model_ObservationsMapper());
             }
             return $this->_mapper;
 	}
@@ -123,7 +137,7 @@ class Default_Model_ComandaToClient
 	}
 }
 
-class Default_Model_ComandaToClientMapper
+class Default_Model_ObservationsMapper
 {
 	protected $_dbTable;
 
@@ -145,12 +159,12 @@ class Default_Model_ComandaToClientMapper
 	{
             if(null === $this->_dbTable)
             {
-                    $this->setDbTable('Default_Model_DbTable_ComandaToClient');
+                    $this->setDbTable('Default_Model_DbTable_Observations');
             }
             return $this->_dbTable;
 	}
 
-	public function find($id, Default_Model_ComandaToClient $model)
+	public function find($id, Default_Model_Observations $model)
 	{
             $result = $this->getDbTable()->find($id);
             if(0 == count($result)) {
@@ -166,15 +180,15 @@ class Default_Model_ComandaToClientMapper
             $resultSet = $this->getDbTable()->fetchAll($select);
             $entries = array();
             foreach($resultSet as $row) {
-                    $model = new Default_Model_ComandaToClient();
-                    $model->setOptions($row->toArray())
-                                    ->setMapper($this);
+                    $model = new Default_Model_Observations();
+                    $model->setOptions($row->toArray())->setMapper($this);
                     $entries[] = $model;
             }
-            return $entries;
+
+        return $entries;
 	}
 	
-	public function fetchRow($select, Default_Model_ComandaToClient $model)
+	public function fetchRow($select, Default_Model_Observations $model)
 	{
             $result=$this->getDbTable()->fetchRow($select);
             if(0 == count($result))
@@ -185,33 +199,24 @@ class Default_Model_ComandaToClientMapper
             return $model;
 	}
 	
-        public function save(Default_Model_ComandaToClient $value)
-        {
-            $auth = Zend_Auth::getInstance();
-            $authAccount = $auth->getStorage()->read();
-            if (null != $authAccount) {
-                if (null != $authAccount->getId()) {
-                        $user = new Default_Model_Users();
-                        $user->find($authAccount->getId());
+    public function save(Default_Model_Observations $value)
+    {
+        $auth = Zend_Auth::getInstance();
+        $authAccount = $auth->getStorage()->read();
+        if (null != $authAccount) {
+            if (null != $authAccount->getId()) {
+                    $user = new Default_Model_Users();
+                    $user->find($authAccount->getId());
 
-                        $data = [
-                                'comanda_id'    => $value->getComandaId(),
-                                'client_id'     => $value->getClientId(),
-                                ];	
+                    $data = [
+                            'user'    => $value->getUser(),
+                            'observation'     => $value->getObservation(),
+                            ];
 
-                        $id = $this->getDbTable()->insert($data); 
+                    $id = $this->getDbTable()->insert($data);
 
-                        return $id;
-                    }
-            }
+                    return $id;
+                }
         }
-        
-        public function delete(Default_Model_ComandaToClient $value)
-        {    
-            $id = $value->getComandaId();
-            
-            $result = $this->getDbTable()->delete(array('comanda_id = ?' => $id));
-            
-            return $result;
-        }
+    }
 }

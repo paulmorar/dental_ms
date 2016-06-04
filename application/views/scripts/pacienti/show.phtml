@@ -1,3 +1,10 @@
+<div class="col-md-12">
+    <?php if(!empty($this->message)) : ?>
+        <?php foreach($this->message as $value) : ?>
+            <center class="w670"><?php echo $value; ?></center>
+        <?php endforeach; ?>
+        <div class="clearfix">&nbsp;</div>
+    <?php endif; ?>
 <div class="box">
     <div class="box-body">
       <?php if($this->result){
@@ -59,10 +66,33 @@
             </td>
           </tr>
           <tr>
-            <td style="width:20%;" class="category"><strong>OBSERVATII</strong></td>
-            <td>
-              <p><?php echo $value->getPhone_number(); ?></p>
-            </td>
+              <td style="width:20%;" class="category"><strong>OBSERVATII</strong></td>
+              <td>
+                  <?php
+                    $observations = Needs_Tools::getObservationsByPacient($value->getId());
+                    if($observations){
+                        $text = '';
+                        foreach($observations as $observation){
+                            $text .= '<p><span style="display:block;float:left;width: 11%;font-weight: bold;">'.date('d-m-Y H:i', $observation->getCreated()).' : </span> ';
+                            $text .= '<span style="margin-left: 10px;float:left;display:block;width: 80%;">'.$observation->GetObservation().'</span></p>';
+                        }
+                    } else {
+                        $text = 'Nu exista observatii!';
+                    }
+                  ?>
+                  <p><?php echo $text; ?></p>
+              </td>
+          </tr>
+          <tr>
+              <td style="width:20%;" class="category"><strong>Adauga observatie</strong></td>
+              <td>
+                <form method="POST">
+                    <div class="form-group">
+                        <textarea cols="100" rows="5" id="observatie" name="observatie" value=""></textarea>
+                    </div>
+                    <button type="submit" id="submitObs" class="btn btn-default">Trimite</button>
+                </form>
+              </td>
           </tr>
         </tbody>
       </table>
