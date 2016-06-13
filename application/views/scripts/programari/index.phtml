@@ -6,11 +6,11 @@
     <div class="clearfix">&nbsp;</div>
 <?php endif; ?>
 </div>
-
-<div class="btn-group margin-bottom">
-    <a href="" data-toggle="modal" data-target="#modal-add" class="btn btn-primary btn-block"><b>Adauga programare</b></a>
-</div>
-
+<?php if(!isset($this->class)){ ?>
+    <div class="btn-group margin-bottom">
+        <a href="" data-toggle="modal" data-target="#modal-add" class="btn btn-primary btn-block"><b>Adauga programare</b></a>
+    </div>
+<?php } ?>
 <div class="clear"></div>
 <div class="box">
 <!--    <div class="box-header">

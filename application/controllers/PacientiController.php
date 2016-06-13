@@ -78,7 +78,7 @@ class PacientiController extends Zend_Controller_Action{
                   ->where('u.id = ?', $id);
               $select->order('u.created DESC');
               $result = $model->fetchAll($select);
-          
+
               $this->view->result = $result;
               $this->view->role   = $this->roleId;
         }

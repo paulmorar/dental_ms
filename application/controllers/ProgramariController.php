@@ -59,6 +59,10 @@ class ProgramariController extends Zend_Controller_Action{
             $this->view->type = 'doctor';
         }
 
+        if($this->roleId == 1){
+            $this->view->class = 'hidden';
+        }
+
         $this->view->userId = $this->userId;
         $this->view->result = $result;
         $this->view->users = $users;

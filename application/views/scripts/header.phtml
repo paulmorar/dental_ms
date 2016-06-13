@@ -22,29 +22,6 @@
             }
 
             ?>
-            <li class="user-header <?php echo $class; ?>" style="margin-top: 17px;color: #fff;margin-right: 30px;">
-                <form class="form-horizontal">
-                    <div class="input-prepend">
-                      <span class="add-on"><i id="selectdaterange" class="fa fa-calendar"></i></span>
-                    </div>
-                </form>
-                <form id="formDate" class="form-horizontal" method="GET">
-                    <input type="hidden" id="startDate" name="start" value="">
-                    <input type="hidden" id="endDate" name="end" value="">
-                </form>
-                <script type="text/javascript">
-                $(document).ready(function() {
-                    $('#selectdaterange').daterangepicker();
-                    $('.applyBtn').on('click',function(){
-                        var startdate = $('.dataStart').val();
-                        var enddate   = $('.dataEnd').val();
-                        $('#startDate').val(startdate);
-                        $('#endDate').val(enddate);
-                        $('#formDate').submit();
-                    });
-                });
-                </script>
-            </li>
             <li class="user-header" style="margin-top: 14px;color: #fff;">
                 <?php
                     if($auth->hasIdentity()){
