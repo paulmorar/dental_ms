@@ -12,9 +12,9 @@ class PacientiController extends Zend_Controller_Action{
         $authAccount = $auth->getStorage()->read();
         if (null!=$authAccount) {
             if (null!=$authAccount->getId()) {
-                $this->userId = $authAccount->getId();
-                $this->roleId = $authAccount->getIdRole();
-                $this->name = $authAccount->getName();
+                $this->userId   = $authAccount->getId();
+                $this->roleId   = $authAccount->getIdRole();
+                $this->name     = $authAccount->getName();
             }
         }
 	}
@@ -24,12 +24,12 @@ class PacientiController extends Zend_Controller_Action{
             $model = new Default_Model_Users();
             $select = $model->getMapper()->getDbTable()->select()
                             ->from(array('u'=>'users'), array('*'))
-                            ->joinLeft(array('r'=>'role'), 'r.id=u.idRole',array('idRole'=>'r.name'))
+                            ->joinLeft(array('r'=>'role'), 'r.id = u.idRole',array('idRole'=>'r.name'))
                             ->where('NOT u.deleted')
                             ->where('u.idRole = ?', 3);
                             if($this->roleId == 3){
                                 $select->where('u.id = ?', $this->userId);
-                            } else {
+                            } else if($this->roleId == 2) {
                                 $select->where('u.idDoctor = ?', $this->userId);
                             }
             $select->order('u.created DESC');
@@ -90,8 +90,8 @@ class PacientiController extends Zend_Controller_Action{
 
   public function addAction()
   {
-      $model = new Default_Model_Users();
-      $form = new Default_Form_Pacienti();
+      $model    = new Default_Model_Users();
+      $form     = new Default_Form_Pacienti($this->roleId);
       $form->setDecorators(array('ViewScript', array('ViewScript', array('viewScript' => 'forms/pacienti/user-add.phtml'))));
 
       $this->view->formAddUser = $form;
@@ -104,7 +104,11 @@ class PacientiController extends Zend_Controller_Action{
 
               $model->setOptions($form->getValues());
               $model->setIdRole(3);
-              $model->setIdDoctor($this->userId);
+              if($this->roleId == 1){
+                  $model->setIdDoctor($form->getValue('doctor'));
+              } else {
+                  $model->setIdDoctor($this->userId);
+              }
               $model->setPassword(md5($password));
 
 
@@ -112,7 +116,7 @@ class PacientiController extends Zend_Controller_Action{
               {
                   $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                       . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
-                                                      . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Utilizatorul a fost adaugat cu succes."
+                                                      . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Pacientul a fost adaugat cu succes."
                                                       . "</div>");
               }
               else
@@ -141,6 +145,9 @@ class PacientiController extends Zend_Controller_Action{
                 if ($this->getRequest()->isPost()) {
                         if ($form->isValid($this->getRequest()->getPost())) {
                                 $model->setOptions($form->getValues());
+                                if($this->roleId == 1){
+                                    $model->setIdDoctor($form->getValue('doctor'));
+                                }
                                 if ($model->save()) {
 
                                         $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"

@@ -73,6 +73,17 @@
                     <?php if(($this->element->phone_number->getMessages())){ echo  $this->formErrors($this->element->phone_number->getMessages());}?>
                 </div>
                 <div class="form-group">
+                    <?php if(isset($this->element->doctor)){ ?>
+                        <?php echo $this->{$this->element->doctor->helper}(
+                            $this->element->doctor->getName(),
+                            $this->element->doctor->getValue(),
+                            $this->element->doctor->getAttribs(),
+                            $this->element->doctor->getMultiOptions()
+                        );?>
+                        <?php if(($this->element->doctor->getMessages())){ echo  $this->formErrors($this->element->doctor->getMessages());} ?>
+                   <?php } ?>
+                </div>
+                <div class="form-group">
                     <?php echo $this->{$this->element->password->helper}(
                         $this->element->password->getName(),
                         $this->element->password->getValue(),

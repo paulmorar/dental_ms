@@ -13,37 +13,69 @@ class Default_Form_Pacienti extends Zend_Form
             $this->addElement($name);
             // END: Name
 
+            $auth = Zend_Auth::getInstance();
+            $authAccount = $auth->getStorage()->read();
+            if (null!=$authAccount) {
+                if (null!=$authAccount->getId()) {
+                    $roleId   = $authAccount->getIdRole();
+                }
+            }
+
+            if($roleId == 1){
+                //BEGIN:doctor
+                $doctor = new Zend_Form_Element_Select('doctor');
+
+                $options= array(''=>'Selecteaza doctorul');
+                $values = new Default_Model_Users();
+                $select = $values->getMapper()->getDbTable()->select()
+                    ->where('NOT deleted')
+                    ->where('idRole = ?', 2)
+                    ->order('id DESC');
+                $result = $values->fetchAll($select);
+                if(NULL != $result)
+                {
+                    foreach($result as $value){
+                        $options[$value->getId()] = $value->getName();
+                    }
+                }
+                $doctor->addMultiOptions($options);
+                $doctor->addValidator(new Zend_Validate_InArray(array_keys($options)));
+                $doctor->setAttribs(array('class'=>'form-control validate[required]','id'=>'tip'));
+                $this->addElement($doctor);
+                //END:doctor
+            }
+
             $birth_date = new Zend_Form_Element_Text('birth_date');
             $birth_date->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Data nasterii','id'=>'birth_date'));
             $birth_date->setRequired(true);
             $this->addElement($birth_date);
 
-						$ocupation = new Zend_Form_Element_Text('ocupation');
+            $ocupation = new Zend_Form_Element_Text('ocupation');
             $ocupation->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Ocupatie','id'=>'ocupation'));
             $ocupation->setRequired(true);
             $this->addElement($ocupation);
 
-						$cnp = new Zend_Form_Element_Text('cnp');
+            $cnp = new Zend_Form_Element_Text('cnp');
             $cnp->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'CNP','id'=>'cnp'));
             $cnp->setRequired(true);
             $this->addElement($cnp);
 
-						$ci = new Zend_Form_Element_Text('ci');
+            $ci = new Zend_Form_Element_Text('ci');
             $ci->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'CI','id'=>'ci'));
             $ci->setRequired(true);
             $this->addElement($ci);
 
-						$phone_number = new Zend_Form_Element_Text('phone_number');
-            $phone_number->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Phone number','id'=>'phone_number'));
+            $phone_number = new Zend_Form_Element_Text('phone_number');
+            $phone_number->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Telefon','id'=>'phone_number'));
             $phone_number->setRequired(true);
             $this->addElement($phone_number);
 
-						$address = new Zend_Form_Element_Text('address');
+            $address = new Zend_Form_Element_Text('address');
             $address->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Adresa','id'=>'address'));
             $address->setRequired(true);
             $this->addElement($address);
 
-						$age = new Zend_Form_Element_Text('age');
+            $age = new Zend_Form_Element_Text('age');
             $age->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Varsta','id'=>'age'));
             $age->setRequired(true);
             $this->addElement($age);
@@ -86,26 +118,39 @@ class Default_Form_Pacienti extends Zend_Form
             $this->birth_date->setValue(date('Y-m-d',$model->getBirth_date()));
             $this->birth_date->setLabel('Data nasterii');
 
-						$this->age->setValue($model->getAge());
+            $this->age->setValue($model->getAge());
             $this->age->setLabel('Varsta');
 
-						$this->ocupation->setValue($model->getOcupation());
+            $this->ocupation->setValue($model->getOcupation());
             $this->ocupation->setLabel('Ocupatie');
 
-						$this->address->setValue($model->getAddress());
+            $this->address->setValue($model->getAddress());
             $this->address->setLabel('Adresa');
 
-						$this->cnp->setValue($model->getCnp());
+            $this->cnp->setValue($model->getCnp());
             $this->cnp->setLabel('CNP');
 
-						$this->ci->setValue($model->getCi());
+            $this->ci->setValue($model->getCi());
             $this->ci->setLabel('CI');
 
-						$this->phone_number->setValue($model->getPhone_number());
+            $this->phone_number->setValue($model->getPhone_number());
             $this->phone_number->setLabel('Telefon');
 
             $this->email->setValue($model->getEmail());
             $this->email->setLabel('Email');
+
+            $auth = Zend_Auth::getInstance();
+            $authAccount = $auth->getStorage()->read();
+            if (null!=$authAccount) {
+                if (null!=$authAccount->getId()) {
+                    $roleId   = $authAccount->getIdRole();
+                }
+            }
+
+            if($roleId == 1) {
+                $this->doctor->setValue($model->getIdDoctor());
+                $this->doctor->setLabel('Doctor');
+            }
 
             $this->email->setAttribs(array('class'=>'form-control'));
             $emailValidateDbNotExists 		= $this->email->getValidator('Zend_Validate_Db_NoRecordExists');

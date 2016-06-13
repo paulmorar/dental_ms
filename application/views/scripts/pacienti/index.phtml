@@ -20,7 +20,7 @@
           <th>Data nasterii</th>
           <th>CNP</th>
           <th>Telefon</th>
-          <th>Adresa</th>
+          <th>Doctor</th>
           <th>Actiuni</th>
         </tr>
         </thead>
@@ -34,7 +34,7 @@
               <td> <?php echo date('d-m-Y', $value->getBirth_date()); ?> </td>
               <td> <?php echo $value->getCnp(); ?> </td>
               <td> <?php echo $value->getPhone_number(); ?> </td>
-              <td> <?php echo $value->getAddress(); ?> </td>
+              <td> <?php echo Needs_Tools::getUserById($value->getIdDoctor()); ?> </td>
               <td>
                   <a href='<?php echo WEBROOT; ?>pacienti/show/id/<?php echo $value->getId(); ?>' title='Vizualizeaza' class='margin-r-5'><i class='fa fa-eye'></i></a>
                   <a href='<?php echo WEBROOT; ?>pacienti/edit/id/<?php echo $value->getId(); ?>' title='Editeaza' class='margin-r-5'><i class='fa fa-edit'></i></a>
