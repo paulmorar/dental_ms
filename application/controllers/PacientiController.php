@@ -29,8 +29,6 @@ class PacientiController extends Zend_Controller_Action{
                             ->where('u.idRole = ?', 3);
                             if($this->roleId == 3){
                                 $select->where('u.id = ?', $this->userId);
-                            } else if($this->roleId == 2) {
-                                $select->where('u.idDoctor = ?', $this->userId);
                             }
             $select->order('u.created DESC');
             $select->setIntegrityCheck(false);
@@ -46,6 +44,7 @@ class PacientiController extends Zend_Controller_Action{
         {
             $model = new Default_Model_Observations();
             $model->setUser($id);
+            $model->setDoctor($this->userId);
             $model->setObservation($this->getRequest()->getParam('observatie'));
 
             if($model->save())
@@ -79,7 +78,7 @@ class PacientiController extends Zend_Controller_Action{
                   ->where('u.id = ?', $id);
               $select->order('u.created DESC');
               $result = $model->fetchAll($select);
-
+          
               $this->view->result = $result;
               $this->view->role   = $this->roleId;
         }
@@ -104,11 +103,6 @@ class PacientiController extends Zend_Controller_Action{
 
               $model->setOptions($form->getValues());
               $model->setIdRole(3);
-              if($this->roleId == 1){
-                  $model->setIdDoctor($form->getValue('doctor'));
-              } else {
-                  $model->setIdDoctor($this->userId);
-              }
               $model->setPassword(md5($password));
 
 
@@ -145,9 +139,6 @@ class PacientiController extends Zend_Controller_Action{
                 if ($this->getRequest()->isPost()) {
                         if ($form->isValid($this->getRequest()->getPost())) {
                                 $model->setOptions($form->getValues());
-                                if($this->roleId == 1){
-                                    $model->setIdDoctor($form->getValue('doctor'));
-                                }
                                 if ($model->save()) {
 
                                         $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"

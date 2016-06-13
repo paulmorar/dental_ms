@@ -92,17 +92,6 @@ class Default_Model_Users
       return $this->_idRole;
   }
 
-	public function setIdDoctor($doctorId)
-  {
-      $this->_idDoctor = $doctorId;
-      return $this;
-  }
-
-  public function getIdDoctor()
-  {
-      return $this->_idDoctor;
-  }
-
   public function setRole(Default_Model_Role $var)
   {
       $this->_role = $var;
@@ -397,7 +386,6 @@ class Default_Model_UsersMapper
 
                         $data = array(
                             'idRole'				=> $value->getIdRole(),
-                            'idDoctor'			=> $value->getIdDoctor(),
                             'email'					=> $value->getEmail(),
                             'name'					=> $value->getName(),
                             'password'			=> $value->getPassword(),

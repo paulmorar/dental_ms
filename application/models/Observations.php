@@ -9,6 +9,7 @@ class Default_Model_Observations
 {
 	protected $_id;
 	protected $_user;
+	protected $_doctor;
 	protected $_observation;
 	protected $_created;
 
@@ -75,6 +76,18 @@ class Default_Model_Observations
 	{
             return $this->_user;
 	}
+
+    public function setDoctor($id)
+    {
+        $this->_doctor = (int) $id;
+
+        return $this;
+    }
+
+    public function getDoctor()
+    {
+        return $this->_doctor;
+    }
     
 	public function setObservation($value)
 	{
@@ -210,6 +223,7 @@ class Default_Model_ObservationsMapper
 
                     $data = [
                             'user'    => $value->getUser(),
+                            'doctor'    => $value->getDoctor(),
                             'observation'     => $value->getObservation(),
                             ];
 

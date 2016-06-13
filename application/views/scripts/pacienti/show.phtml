@@ -74,7 +74,8 @@
                         $text = '';
                         foreach($observations as $observation){
                             $text .= '<p><span style="display:block;float:left;width: 11%;font-weight: bold;">'.date('d-m-Y H:i', $observation->getCreated()).' : </span> ';
-                            $text .= '<span style="margin-left: 10px;float:left;display:block;width: 80%;">'.$observation->GetObservation().'</span></p>';
+                            $text .= '<span style="margin-left: 10px;float:left;display:block;width: 80%;">'.$observation->getObservation().'</span></p>';
+                            $text .= '<span>'.Needs_Tools::getUserById($observation->getDoctor()).'</span></p>';
                         }
                     } else {
                         $text = 'Nu exista observatii!';

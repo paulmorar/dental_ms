@@ -13,38 +13,6 @@ class Default_Form_Pacienti extends Zend_Form
             $this->addElement($name);
             // END: Name
 
-            $auth = Zend_Auth::getInstance();
-            $authAccount = $auth->getStorage()->read();
-            if (null!=$authAccount) {
-                if (null!=$authAccount->getId()) {
-                    $roleId   = $authAccount->getIdRole();
-                }
-            }
-
-            if($roleId == 1){
-                //BEGIN:doctor
-                $doctor = new Zend_Form_Element_Select('doctor');
-
-                $options= array(''=>'Selecteaza doctorul');
-                $values = new Default_Model_Users();
-                $select = $values->getMapper()->getDbTable()->select()
-                    ->where('NOT deleted')
-                    ->where('idRole = ?', 2)
-                    ->order('id DESC');
-                $result = $values->fetchAll($select);
-                if(NULL != $result)
-                {
-                    foreach($result as $value){
-                        $options[$value->getId()] = $value->getName();
-                    }
-                }
-                $doctor->addMultiOptions($options);
-                $doctor->addValidator(new Zend_Validate_InArray(array_keys($options)));
-                $doctor->setAttribs(array('class'=>'form-control validate[required]','id'=>'tip'));
-                $this->addElement($doctor);
-                //END:doctor
-            }
-
             $birth_date = new Zend_Form_Element_Text('birth_date');
             $birth_date->setAttribs(array('class'=>'form-control validate[required]','placeholder'=>'Data nasterii','id'=>'birth_date'));
             $birth_date->setRequired(true);
@@ -138,19 +106,6 @@ class Default_Form_Pacienti extends Zend_Form
 
             $this->email->setValue($model->getEmail());
             $this->email->setLabel('Email');
-
-            $auth = Zend_Auth::getInstance();
-            $authAccount = $auth->getStorage()->read();
-            if (null!=$authAccount) {
-                if (null!=$authAccount->getId()) {
-                    $roleId   = $authAccount->getIdRole();
-                }
-            }
-
-            if($roleId == 1) {
-                $this->doctor->setValue($model->getIdDoctor());
-                $this->doctor->setLabel('Doctor');
-            }
 
             $this->email->setAttribs(array('class'=>'form-control'));
             $emailValidateDbNotExists 		= $this->email->getValidator('Zend_Validate_Db_NoRecordExists');

@@ -219,13 +219,13 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                                         case 'login' :
                                                 $layout->getView()->headTitle('Login', 'SET');
                                                 if(!$acl->isAllowed($accountRole,'default:auth', 'login')) {
-                                                    if($accountRole == 3){
-                                                        $this->_response->setRedirect(WEBROOT.'pacienti/show/id/1');
-                                                        $layout->setLayout('layout_user');
-                                                    } else {
+//                                                    if($accountRole == 3){
+//                                                        $this->_response->setRedirect(WEBROOT.'pacienti/show/id/1');
+//                                                        $layout->setLayout('layout_user');
+//                                                    } else {
                                                         $this->_response->setRedirect(WEBROOT.'pacienti');
                                                         $layout->setLayout('layout');
-                                                    }
+//                                                    }
                                                 }
                                                 break;
                                         default:
@@ -233,11 +233,11 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
                                 }
                                 break;
                         default :
-                            if($accountRole == 3){
-                                $layout->setLayout('layout_user');
-                            } else {
+//                            if($accountRole == 3){
+////                                $layout->setLayout('layout_user');
+//                            } else {
                                 $layout->setLayout('layout');
-                            }
+//                            }
 
                     if(!$acl->has($module.':'.$controller.':'.$action)){
                         $acl->add(new Zend_Acl_Resource($module.':'.$controller.':'.$action));
