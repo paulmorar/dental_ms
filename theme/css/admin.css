@@ -4924,16 +4924,19 @@ table.text-center th {
   border: solid 1px #dcdcdc;
   transition: box-shadow 0.3s, border 0.3s;
   margin: 0 5px;
+  border-radius: 5px;
 }
 .schedule-modal #hourSelect {
   border: solid 1px #dcdcdc;
   transition: box-shadow 0.3s, border 0.3s;
   height: 45px;
   margin: 0 5px;
+  background: white;
 }
 .schedule-modal #doctorSelect {
   border: solid 1px #dcdcdc;
   transition: box-shadow 0.3s, border 0.3s;
   height: 45px;
   margin: 0 5px;
+  background: white;
 }
