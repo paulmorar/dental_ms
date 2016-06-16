@@ -1,2 +1,2 @@
-# pipeline
-Agents Management System
+# Dental Management System
+Small management system demo (MVP)

@@ -56,7 +56,7 @@ class DoctorsController extends Zend_Controller_Action{
 
                         $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                             . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
-                                                            . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Utilizatorul a fost adaugat cu succes."
+                                                            . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Doctorul a fost adaugat cu succes."
                                                             . "</div>");
                     }
                     else
@@ -89,7 +89,7 @@ class DoctorsController extends Zend_Controller_Action{
 
                                         $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                             . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
-                                                            . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Utilizatorul a fost editat cu succes."
+                                                            . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Doctorul a fost editat cu succes."
                                                             . "</div>");
                                 } else {
                                         $this->_flashMessenger->addMessage("<div class='alert alert-danger alert-dismissible'>"
@@ -112,7 +112,7 @@ class DoctorsController extends Zend_Controller_Action{
                             if ($model->delete()) {
                                     $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                                 . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
-                                                                . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Utilizatorul a fost sters cu succes."
+                                                                . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Doctorul a fost sters cu succes."
                                                                 . "</div>");
                             } else {
                                     $this->_flashMessenger->addMessage("<div class='alert alert-danger alert-dismissible'>"
