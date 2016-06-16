@@ -305,6 +305,7 @@ a:focus {
 }
 .main-header .logo .logo-lg {
   display: block;
+  text-align: left;
 }
 .main-header .logo .logo-mini {
   display: none;
@@ -4895,4 +4896,44 @@ table.text-center th {
   .table-responsive > .table tr td {
     white-space: normal !important;
   }
+}
+.pacient-observation {
+  border-bottom: 1px solid #ddd;
+}
+.pacient-observation-date {
+  display: inline-block;
+  font-weight: bold;
+}
+.pacient-observation-message, .pacient-observation-doctor {
+  display: block;
+}
+.pacient-observation-message {
+  margin-top: 10px;
+}
+.pacient-observation-doctor {
+  width: 100%;
+  text-align: right;
+  font-weight: bold;
+  padding: 20px 0;
+}
+#observatie {
+  width: 100%;
+}
+.schedule-modal .hasDatepicker {
+  padding: 10px;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+  margin: 0 5px;
+}
+.schedule-modal #hourSelect {
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+  height: 45px;
+  margin: 0 5px;
+}
+.schedule-modal #doctorSelect {
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+  height: 45px;
+  margin: 0 5px;
 }
