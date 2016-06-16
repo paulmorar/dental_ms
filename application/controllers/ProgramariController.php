@@ -23,7 +23,7 @@ class ProgramariController extends Zend_Controller_Action{
         if( $this->roleId == 2){
             $select->where('p.idDoctor = '.$this->userId);
 
-        } elseif ($this->roleId == 2){
+        } elseif ($this->roleId == 3){
             $select->where('p.idPacient = '.$this->userId);
 
         }
