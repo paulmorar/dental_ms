@@ -19,19 +19,6 @@ class App_Controller_Plugin extends Zend_Controller_Plugin_Abstract
         $layout->getView()->controller                  = $controller;
         $layout->getView()->action			= $action;
 
-
-        // BEGIN: Translate
-        setlocale(LC_ALL, 'en_US.UTF-8');
-        Zend_Registry::set('lang', 'ro');
-        Zend_Registry::set('lang_id', '1');
-
-        $adminLang = 'en';
-        $translate = new Zend_Translate('csv', 'data/lang/ro.csv', $adminLang);
-        $translate->setLocale($adminLang);
-
-        Zend_Registry::set('translate', $translate);
-        // END: Translate
-
         $acl = new Zend_Acl();
         $acl->add(new Zend_Acl_Resource('default:auth'));
         $acl->add(new Zend_Acl_Resource('default:index'));

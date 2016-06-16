@@ -1,10 +1,10 @@
 <?php
 class ProgramariController extends Zend_Controller_Action{
-    
+
     public function init(){
         $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->message = $this->_flashMessenger->getMessages();
-        
+
         $auth = Zend_Auth::getInstance();
         $authAccount = $auth->getStorage()->read();
         if (null!=$authAccount) {
@@ -90,14 +90,14 @@ class ProgramariController extends Zend_Controller_Action{
                 $model->setData($date);
                 $model->setOra($hour);
 
-                if($id = $model->save()) {     
+                if($id = $model->save()) {
 
                     $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                     . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
-                                                    . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Comanda a fost adaugat cu succes."
+                                                    . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Programarea a fost adaugat cu succes."
                                                     . "</div>");
                 } else {
-                    
+
                      $this->_flashMessenger->addMessage("<div class='alert alert-danger alert-dismissible'>"
                                                         . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
                                                         . "<h4><i class='icon fa fa-ban'></i> Eroare! </h4>A existat o eroare. Va rugam incercati din nou."
@@ -107,7 +107,7 @@ class ProgramariController extends Zend_Controller_Action{
         }
     }
 
-    public function deleteAction() 
+    public function deleteAction()
     {
         $id = $this->getRequest()->getParam('id');
         $model = new Default_Model_Comanda();
@@ -118,10 +118,10 @@ class ProgramariController extends Zend_Controller_Action{
                     $modelDepartament->setComanda_id($id);
                     $modelDepartament->delete($id);
                     //stergem din tabela de legatura cu clientii
-                    $modelLegatura = new Default_Model_ComandaToClient();   
+                    $modelLegatura = new Default_Model_ComandaToClient();
                     $modelLegatura->setComandaId($id);
                     $modelLegatura->delete($id);
-                    
+
                     $modelLogs = new Default_Model_ComandaLogs();
                     $modelLogs->setUserId($this->userId);
                     $modelLogs->setComandaId($id);
@@ -130,7 +130,7 @@ class ProgramariController extends Zend_Controller_Action{
                     $modelLogs->setDepartamentInitial(0);
                     $modelLogs->setDepartamentTrimis(0);
                     $modelLogs->save();
-                    
+
                     $this->_flashMessenger->addMessage("<div class='alert alert-success alert-dismissible'>"
                                                         . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
                                                         . "<h4><i class='icon fa fa-check'></i> Succes! </h4>Albumul a fost sters cu succes."
@@ -141,7 +141,7 @@ class ProgramariController extends Zend_Controller_Action{
                                                         . "<h4><i class='icon fa fa-ban'></i> Eroare! </h4>A existat o eroare. Va rugam incercati din nou."
                                                         . "</div>");
             }
-            $this->_redirect('/comanda');	
+            $this->_redirect('/comanda');
         }
     }
 
