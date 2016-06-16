@@ -228,11 +228,11 @@ $(document).ready(function(){
 			width: 400,
 			modal: true,
 			buttons: {
-				'<?php echo Zend_Registry::get('translate')->_('yes'); ?>': function() {
+				'Da': function() {
 					$(this).dialog('close').dialog('destroy');
 					window.location.href = link.attr('href');
 				},
-				'<?php echo Zend_Registry::get('translate')->_('no'); ?>': function() {
+				'Nu': function() {
 					$(this).dialog('close').dialog('destroy');
 					window.location.reload();
 				}
